@@ -1,0 +1,291 @@
+/* Manage Profiles - Dark Theme */
+
+.manage-profiles-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0a0612 0%, #000000 50%, #0a0612 100%);
+    color: white;
+    padding: 40px 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.manage-profiles-page::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 20% 30%, rgba(138, 43, 226, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(75, 0, 130, 0.08) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.manage-header {
+    max-width: 900px;
+    margin: 0 auto 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+}
+
+.manage-header h1 {
+    font-size: 38px;
+    background: linear-gradient(135deg, #a855f7 0%, #e9d5ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.btn-done {
+    padding: 12px 35px;
+    background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 8px 25px rgba(168, 85, 247, 0.4);
+}
+
+.btn-done:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 35px rgba(168, 85, 247, 0.6);
+}
+
+.manage-main {
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.profiles-list {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.profile-item {
+    background: rgba(26, 10, 46, 0.6);
+    border-radius: 15px;
+    padding: 30px;
+    border: 2px solid rgba(138, 43, 226, 0.4);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(15px);
+}
+
+.profile-item:hover {
+    border-color: rgba(168, 85, 247, 0.6);
+    box-shadow: 0 8px 30px rgba(168, 85, 247, 0.3);
+    background: rgba(26, 10, 46, 0.8);
+}
+
+.profile-view {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.profile-avatar-large {
+    width: 85px;
+    height: 85px;
+    background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 50px;
+    flex-shrink: 0;
+    box-shadow: 0 8px 25px rgba(168, 85, 247, 0.5);
+}
+
+.profile-info {
+    flex: 1;
+}
+
+.profile-info h3 {
+    font-size: 26px;
+    margin-bottom: 10px;
+    color: rgba(255, 255, 255, 0.95);
+}
+
+.kids-badge {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: #0a0612;
+    padding: 5px 14px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.btn-edit {
+    padding: 12px 24px;
+    background: rgba(138, 43, 226, 0.25);
+    border: 2px solid rgba(168, 85, 247, 0.5);
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.btn-edit:hover {
+    background: rgba(138, 43, 226, 0.4);
+    border-color: #a855f7;
+    box-shadow: 0 5px 20px rgba(168, 85, 247, 0.3);
+}
+
+/* Edit Form */
+.profile-edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.edit-avatar {
+    display: flex;
+    gap: 35px;
+    align-items: flex-start;
+}
+
+.current-avatar {
+    width: 110px;
+    height: 110px;
+    background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 65px;
+    flex-shrink: 0;
+    box-shadow: 0 10px 35px rgba(168, 85, 247, 0.5);
+}
+
+.avatar-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+    flex: 1;
+}
+
+.avatar-option {
+    width: 55px;
+    height: 55px;
+    background: rgba(138, 43, 226, 0.2);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.avatar-option:hover {
+    background: rgba(138, 43, 226, 0.35);
+}
+
+.avatar-option.selected {
+    border-color: #a855f7;
+    background: rgba(168, 85, 247, 0.4);
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+}
+
+.edit-input {
+    padding: 16px 20px;
+    background: rgba(138, 43, 226, 0.15);
+    border: 2px solid rgba(138, 43, 226, 0.4);
+    border-radius: 10px;
+    color: white;
+    font-size: 18px;
+}
+
+.edit-input:focus {
+    outline: none;
+    border-color: #a855f7;
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+    background: rgba(138, 43, 226, 0.2);
+}
+
+.kids-toggle {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.kids-toggle input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+}
+
+.edit-actions {
+    display: flex;
+    gap: 15px;
+    padding-top: 12px;
+}
+
+.edit-actions button {
+    padding: 14px 28px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-save {
+    background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+    color: white;
+    box-shadow: 0 8px 25px rgba(168, 85, 247, 0.4);
+}
+
+.btn-save:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(168, 85, 247, 0.6);
+}
+
+.btn-cancel {
+    background: rgba(138, 43, 226, 0.2);
+    border: 2px solid rgba(138, 43, 226, 0.5) !important;
+    color: white;
+}
+
+.btn-cancel:hover {
+    background: rgba(138, 43, 226, 0.35);
+    border-color: rgba(168, 85, 247, 0.7) !important;
+}
+
+.btn-delete {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+    margin-left: auto;
+    box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+}
+
+.btn-delete:hover {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    box-shadow: 0 12px 35px rgba(239, 68, 68, 0.6);
+}
+
+.loading {
+    text-align: center;
+    padding: 100px 20px;
+    font-size: 24px;
+    color: rgba(255, 255, 255, 0.5);
+}

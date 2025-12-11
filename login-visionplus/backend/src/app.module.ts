@@ -1,0 +1,41 @@
+import { Module } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
+import { APP_GUARD } from '@nestjs/core';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { AuthModule } from './auth/auth.module';
+import { MoviesModule } from './movies/movies.module';
+import { ProfilesModule } from './profiles/profiles.module';
+import { ListsModule } from './lists/lists.module';
+import { VideosModule } from './videos/videos.module';
+import { HistoryModule } from './history/history.module';
+
+import { SubscriptionsModule } from './subscriptions/subscriptions.module';
+
+
+@Module({
+    imports: [
+        MongooseModule.forRoot('mongodb://localhost/visionplus'),
+        ThrottlerModule.forRoot([{
+            ttl: 60000,
+            limit: 10,
+        }]),
+        AuthModule,
+        MoviesModule, // modulo de peliculas con TMDB (costó configurarlo cawn)
+        ProfilesModule, // modulo de perfiles
+        ListsModule, // modulo de listas personalizadas
+        VideosModule, // modulo de videos
+        HistoryModule, // modulo de historial
+        SubscriptionsModule, // modulo de suscripciones y pagos
+    ],
+    controllers: [AppController],
+    providers: [
+        AppService,
+        {
+            provide: APP_GUARD,
+            useClass: ThrottlerGuard,
+        },
+    ],
+})
+export class AppModule { }
