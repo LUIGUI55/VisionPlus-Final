@@ -1,38 +1,51 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-
-function getVideoById(id) {
-  const catalog = {
-    strangers2: {
-      title: "Strangers: Capítulo 2 (2025)",
-      poster:
-        "https://cdn.hobbyconsolas.com/sites/navi.axelspringer.es/public/media/image/2025/06/strangers-capitulo-2-4338497.jpg?tf=3840x",
-      sources: [{ src: "/videos/strangers2-1080.mp4", type: "video/mp4" }],
-      subtitles: [],
-    },
-  };
-  return catalog[id] ?? { title: id, sources: [] };
-}
 
 export default function PlayerPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const data = useMemo(() => getVideoById(id), [id]);
+  const [videoData, setVideoData] = useState(null);
   const videoRef = useRef(null);
-
   const storageKey = `vp-progress:${id}`;
 
- 
+  useEffect(() => {
+    const fetchVideo = async () => {
+      try {
+        const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+        // Si el ID no es numérico, el backend devolverá el video por defecto
+        const response = await fetch(`${API_URL}/videos/${id}/stream`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          // Adaptar respuesta del backend al formato que espera el player o usarlo directo
+          setVideoData({
+            title: data.title,
+            poster: "https://placehold.co/1920x1080/1a1a1a/ffffff?text=" + encodeURIComponent(data.title),
+            sources: [{ src: data.url, type: "video/mp4" }]
+          });
+        }
+      } catch (error) {
+        console.error("Error cargando video:", error);
+      }
+    };
+
+    fetchVideo();
+  }, [id]);
+
   useEffect(() => {
     const v = videoRef.current;
-    if (!v) return;
+    if (!v || !videoData) return; // Esperar a que haya datos
     const t = Number(localStorage.getItem(storageKey) || 0);
     const onLoaded = () => {
       if (t && v.duration && t < v.duration - 3) v.currentTime = t;
     };
     v.addEventListener("loadedmetadata", onLoaded);
     return () => v.removeEventListener("loadedmetadata", onLoaded);
-  }, [storageKey]);
+  }, [storageKey, videoData]);
 
   useEffect(() => {
     const v = videoRef.current;
@@ -46,7 +59,15 @@ export default function PlayerPage() {
       v.removeEventListener("timeupdate", onTime);
       v.removeEventListener("ended", onEnded);
     };
-  }, [storageKey]);
+  }, [storageKey, videoData]); // Added videoData dependency
+
+  if (!videoData) {
+    return (
+      <div className="watch" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <h2 style={{ color: 'white' }}>Cargando video...</h2>
+      </div>
+    );
+  }
 
   return (
     <div className="watch">
@@ -222,7 +243,7 @@ export default function PlayerPage() {
 
       {/* CONTENIDO */}
       <main className="watch-main">
-        <h1 className="watch-title">{data.title}</h1>
+        <h1 className="watch-title">{videoData.title}</h1>
 
         <div className="watch__panel">
           <video
@@ -230,10 +251,10 @@ export default function PlayerPage() {
             className="video-el"
             controls
             preload="metadata"
-            poster={data.poster}
+            poster={videoData.poster}
             playsInline
           >
-            {data.sources.map((s) => (
+            {videoData.sources.map((s) => (
               <source key={s.src} src={s.src} type={s.type} />
             ))}
             Tu navegador no soporta video HTML5.

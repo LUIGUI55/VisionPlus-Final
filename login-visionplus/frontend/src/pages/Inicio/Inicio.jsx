@@ -8,7 +8,7 @@ export default function Inicio() {
 
 
   function goToPlayer() {
-    navigate("/ver/strangerthings");
+    navigate("/ver/550");
   }
 
   function goToDetail() {
@@ -23,7 +23,7 @@ export default function Inicio() {
     navigate("/busqueda");
   }
 
-  
+
   function goToPerfil() {
     navigate("/perfil");
   }
@@ -35,7 +35,7 @@ export default function Inicio() {
   return (
     <div className="inicio-page">
 
-      {}
+      { }
       <header className="inicio-navbar">
         <div className="inicio-logo">
           VISIONPLUS
@@ -46,7 +46,7 @@ export default function Inicio() {
           <a onClick={goToMiLista} style={{ cursor: "pointer" }}>Mi lista</a>
         </nav>
 
-        {}
+        { }
         <div className="inicio-search-box" onClick={goToBusqueda}>
           <input
             type="text"
@@ -67,12 +67,12 @@ export default function Inicio() {
         </div>
       </header>
 
-      {}
+      { }
       <section className="inicio-hero">
         <div className="inicio-hero-bg"></div>
 
         <div className="inicio-hero-content">
-          <h1>Stranger Things</h1>
+          <h1>Stranger Things (Demo Fight Club)</h1>
           <p>
             Cuando un niño desaparece, sus amigos, la familia y la policía
             se ven envueltos en un misterio con fuerzas sobrenaturales.
@@ -96,21 +96,30 @@ export default function Inicio() {
         </div>
       </section>
 
-      {}
+      { }
       <section className="inicio-section">
-        <h2>Tendencias...</h2>
+        <h2>Demos disponibles</h2>
 
         <div className="inicio-list">
           {[
-            "Venom","Monsters of War","E.T.","Cazador de Monstruos",
-            "Jupiter Ascending","Troll","TUA","The Strangers"
-          ].map((title, index) => (
-            <div className="inicio-movie" key={index}>
+            { id: 550, title: "Fight Club (Demo)" },
+            { id: 680, title: "Pulp Fiction (Demo)" },
+            { id: 278, title: "Shawshank (Demo)" },
+            { id: 999, title: "Sintel (Default)" },
+            { id: 101, title: "Venom" },
+            { id: 102, title: "Monsters of War" }
+          ].map((movie, index) => (
+            <div
+              className="inicio-movie"
+              key={index}
+              onClick={() => navigate(`/ver/${movie.id}`)}
+              style={{ cursor: 'pointer' }}
+            >
               <img
-                src="https://placehold.co/300x420/111111/FFFFFF?text=Poster"
-                alt={title}
+                src={`https://placehold.co/300x420/111111/FFFFFF?text=${encodeURIComponent(movie.title)}`}
+                alt={movie.title}
               />
-              <div className="inicio-movie-title">{title}</div>
+              <div className="inicio-movie-title">{movie.title}</div>
             </div>
           ))}
         </div>

@@ -1,21 +1,63 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const Resultados = () => {
   const [isOpen, setIsOpen] = useState(true);
   const [peliculas, setPeliculas] = useState([]);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const tipo = searchParams.get("tipo"); // 'peliculas' | 'series'
 
   useEffect(() => {
-    const ejemploPeliculas = [
-      { titulo: "Película A", img: "https://placehold.co/300x200/9d4edd/FFFFFF?text=Película+A", id: "a" },
-      { titulo: "Película B", img: "https://placehold.co/300x200/9d4edd/FFFFFF?text=Película+B", id: "b" },
-      { titulo: "Película C", img: "https://placehold.co/300x200/9d4edd/FFFFFF?text=Película+C", id: "c" },
-      { titulo: "Película D", img: "https://placehold.co/300x200/9d4edd/FFFFFF?text=Película+D", id: "d" },
-      { titulo: "Película E", img: "https://placehold.co/300x200/9d4edd/FFFFFF?text=Película+E", id: "e" },
-    ];
-    setPeliculas(ejemploPeliculas);
-  }, []);
+    const fetchContent = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        console.error("No token found");
+        // Opcional: Redirigir a login
+        return;
+      }
+
+      const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+      let endpoint = "/movies/popular"; // Default
+
+      if (tipo === "series") {
+        endpoint = "/movies/series/popular";
+      }
+      // Si hay otros tipos o busqueda, ajustar aqui
+
+      try {
+        const response = await fetch(`${API_URL}${endpoint}`, {
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        // data.results es el array de TMDB
+
+        if (data && data.results) {
+          const mapped = data.results.map(item => ({
+            id: item.id,
+            titulo: item.title || item.name, // TMDB usa title para pelis, name para series
+            img: item.poster_path
+              ? `https://image.tmdb.org/t/p/w500${item.poster_path}`
+              : "https://placehold.co/300x450/1a1a1a/FFFFFF?text=No+Image"
+          }));
+          setPeliculas(mapped);
+        }
+
+      } catch (error) {
+        console.error("Error fetching content:", error);
+      }
+    };
+
+    fetchContent();
+  }, [tipo]);
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "unset";

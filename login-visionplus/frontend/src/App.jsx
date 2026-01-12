@@ -5,7 +5,7 @@ import VisionPlusNeon from "./pages/Landing/VisionPlusNeon.jsx";
 import VisionPlusLogin from "./pages/Login/VisionPlusLogin.jsx";
 import Register from "./pages/Register/Register.jsx";
 import VisionPlusDetail from "./pages/src/components/VisionPlusDetail.jsx";
-import PlayerPage from "./pages/src/pages/PlayerPage.jsx";
+import Player from "./pages/Player/Player.jsx";
 import MiLista from "./pages/Milista/MiLista.jsx";
 import Busqueda from "./pages/Categorias/Busqueda.jsx";
 import Resultados from "./pages/Categorias/Resultados.jsx";
@@ -51,7 +51,7 @@ function App() {
       <Route path="/detail/:id" element={<VisionPlusDetail />} />
 
       {/* PLAYER */}
-      <Route path="/ver/:id" element={<PlayerPage />} />
+      <Route path="/ver/:videoId" element={<Player />} />
 
       {/* MI LISTA */}
       <Route
