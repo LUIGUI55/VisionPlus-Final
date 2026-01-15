@@ -20,12 +20,14 @@ const Resultados = () => {
       }
 
 
+      const query = searchParams.get("q");
       let endpoint = "/movies/popular"; // Default
 
-      if (tipo === "series") {
+      if (query) {
+        endpoint = `/movies/search?query=${encodeURIComponent(query)}`;
+      } else if (tipo === "series") {
         endpoint = "/movies/series/popular";
       }
-      // Si hay otros tipos o busqueda, ajustar aqui
 
       try {
         const response = await fetch(`${API_URL}${endpoint}`, {

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const VideoPlayer = ({ videoId, libraryId, title }) => {
+const VideoPlayer = ({ videoId, libraryId, title, className }) => {
     // Construir la URL del embed de Bunny.net.
     // Nota: libraryId suele ser necesario si no es parte de la URL por defecto, 
     // pero la estructura básica es: https://iframe.mediadelivery.net/embed/{libraryId}/{videoId}
@@ -18,15 +18,18 @@ const VideoPlayer = ({ videoId, libraryId, title }) => {
 
     if (isDirectUrl) {
         return (
-            <div className="w-full max-w-5xl mx-auto my-8">
-                {title && <h2 className="text-2xl text-white mb-4 font-bold">{title}</h2>}
-                <div className="relative pt-[56.25%] bg-black rounded-lg overflow-hidden shadow-2xl border border-gray-800">
+            <div className={`relative w-full h-full bg-black group ${className || ''}`}>
+                {title && (
+                    <div className="absolute top-0 left-0 w-full p-6 bg-gradient-to-b from-black/80 to-transparent z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                        <h2 className="text-3xl text-white font-bold">{title}</h2>
+                    </div>
+                )}
+                <div className="w-full h-full relative">
                     <video
                         src={videoId}
                         controls
                         autoPlay
-                        className="absolute top-0 left-0 w-full h-full"
-                        style={{ objectFit: 'cover' }}
+                        className="w-full h-full object-cover"
                     >
                         Tu navegador no soporta el elemento de video.
                     </video>
@@ -42,13 +45,20 @@ const VideoPlayer = ({ videoId, libraryId, title }) => {
     const embedUrl = `https://iframe.mediadelivery.net/embed/${libraryId}/${videoId}?autoplay=true&loop=false&muted=false&preload=true`;
 
     return (
-        <div className="w-full max-w-5xl mx-auto my-8">
-            {title && <h2 className="text-2xl text-white mb-4 font-bold">{title}</h2>}
-            <div className="relative pt-[56.25%] bg-black rounded-lg overflow-hidden shadow-2xl border border-gray-800">
+        <div className={`relative w-full h-full bg-black group ${className || ''}`}>
+            {/* Title Overlay (Fade on hover) */}
+            {title && (
+                <div className="absolute top-0 left-0 w-full p-6 bg-gradient-to-b from-black/80 to-transparent z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                    <h2 className="text-3xl text-white font-bold">{title}</h2>
+                </div>
+            )}
+
+            {/* Iframe Container - Full Screen logic */}
+            <div className="w-full h-full relative">
                 <iframe
                     src={embedUrl}
                     loading="lazy"
-                    className="absolute top-0 left-0 w-full h-full border-0"
+                    className="w-full h-full border-0 absolute inset-0"
                     allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
                     allowFullScreen={true}
                     title={title || "Video Player"}

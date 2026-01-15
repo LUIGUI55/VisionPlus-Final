@@ -1,15 +1,25 @@
 import React from "react";
+import { User, Edit2, Mail, Bell, Search } from "lucide-react";
 export default function VisionPlusPerfil() {
+  const [avatar, setAvatar] = React.useState(null);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => setAvatar(e.target.result);
+      reader.readAsDataURL(file);
+    }
+  };
+
   return (
     <div>
       <style>{`
 :root{
  --bg-dark:#0b0f16;
- --bg-card:#1a1e26;
  --text-light:#e5e7eb;
- --neon-purple:#9d4edd; /* base sólido */
- --neon-violet:#7b2cbf; /* más oscuro para hover */
- --line:#4b5563;
+ --neon-purple:#9d4edd;
+ --neon-violet:#7b2cbf;
 }
 
 *{box-sizing:border-box}
@@ -19,12 +29,10 @@ body{
  background:var(--bg-dark);
  color:var(--text-light);
  font-family:system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
- /* --- CAMBIOS PARA CENTRAR EL CONTENIDO --- */
  display: flex;
- justify-content: center; /* Centra el contenido horizontalmente */
- min-height: 100vh; /* Ocupa el 100% de la altura de la ventana */
+ justify-content: center;
+ min-height: 100vh;
  flex-direction: column; 
- /* ----------------------------------------- */
 }
 
 /* Header */
@@ -38,21 +46,14 @@ body{
  font-weight:900; letter-spacing:.8px; font-size:1.5rem; white-space:nowrap;
  color:var(--neon-purple);
 }
-.nav{
- display:flex; align-items:center; gap:20px; font-weight:700;
-}
-.nav a{
- color:#c9cbd1; text-decoration:none; padding:.4rem .6rem; border-radius:10px; transition:.2s;
-}
-.nav a:hover{
- color:var(--text-light);
- background:rgba(157,78,221,.15); /* mate */
-}
+.nav{ display:flex; align-items:center; gap:20px; font-weight:700; }
+.nav a{ color:#c9cbd1; text-decoration:none; padding:.4rem .6rem; border-radius:10px; transition:.2s; }
+.nav a:hover{ color:var(--text-light); background:rgba(157,78,221,.15); }
 
 /* Search */
 .search{
  justify-self:center; display:flex; align-items:center; gap:8px;
- background:#0e131c; padding:6px 10px; border-radius:999px;
+ background:#0e131c; padding:6px 14px; border-radius:999px;
  border:1.6px solid #2a3344;
  width:min(480px, 90%);
 }
@@ -60,14 +61,10 @@ body{
  flex:1; border:0; background:transparent; outline:none; color:var(--text-light);
  padding:.35rem .25rem; font-weight:600;
 }
-.search .icon{
- width:26px; height:26px; color:var(--neon-purple);
-}
+.search .icon{ color:var(--neon-purple); }
 
 /* Actions */
-.actions{
- justify-self:end; display:flex; align-items:center; gap:18px;
-}
+.actions{ justify-self:end; display:flex; align-items:center; gap:18px; }
 .actions a{
  color:var(--neon-purple); text-decoration:none; font-weight:700;
  display:flex; align-items:center; gap:8px;
@@ -77,21 +74,16 @@ body{
 /* Layout principal */
 .container{
  width:min(1120px, 92%);
- /* margin:24px auto 64px auto;  <-- SE ELIMINÓ */
-  margin-top: 24px; /* <--- SE AÑADIÓ */
-  margin-bottom: 64px; /* <--- SE AÑADIÓ */
+ margin-top: 24px;
+ margin-bottom: 64px;
  border:1px solid #3b4454; border-radius:12px;
  padding:18px 18px 32px 18px;
 }
-
-/* Título de sección */
 .section-title{ font-weight:800; letter-spacing:.2px; margin:6px 8px 0 8px; }
 .hr{ height:1px; background:#9ca3af44; margin:10px 0 16px 0 }
 
 /* Panel de perfil */
-.profile-grid{
- display:grid; grid-template-columns: 1.1fr 1.4fr; gap:28px;
-}
+.profile-grid{ display:grid; grid-template-columns: 1.1fr 1.4fr; gap:28px; }
 @media (max-width: 880px){ .profile-grid{ grid-template-columns:1fr; } }
 
 .card{
@@ -104,16 +96,25 @@ body{
 .avatar{
  height:260px; border:1px solid #5a6476; border-radius:10px;
  display:grid; place-items:center; position:relative;
+ overflow: hidden;
 }
-.avatar .svg{
- width:160px; height:160px; color:var(--neon-purple);
+.avatar-img {
+ width: 100%; height: 100%; object-fit: cover; position: absolute;
 }
+.avatar-placeholder {
+ color: var(--neon-purple);
+}
+
 .edit-fab{
  position:absolute; bottom:18px; left:50%; transform:translateX(-50%);
  width:38px; height:38px; border-radius:10px; display:grid; place-items:center;
- background:#0f1420; border:1.5px solid #cfd3db88;
+ background:#0f1420; border:1.5px solid #cfd3db88; cursor: pointer;
+ transition: all 0.2s;
+ z-index: 5;
 }
-.edit-fab svg{ width:20px; height:20px; color:#e5e7eb }
+.edit-fab:hover { background: var(--neon-purple); border-color: var(--neon-purple); }
+.edit-fab svg{ color:#e5e7eb; transition: color 0.2s; }
+.edit-fab:hover svg { color: white; }
 
 /* Form */
 .form .group{ margin-bottom:18px }
@@ -123,24 +124,21 @@ body{
  background:#3a4252cc; border:2px solid #555e70; color:var(--text-light);
  outline:none; transition:.2s;
 }
-.input:focus{
- border-color:var(--neon-purple);
-}
+.input:focus{ border-color:var(--neon-purple); }
 .inline-edit{
  position:absolute; right:14px; top:50%; transform:translateY(-50%);
- width:28px; height:28px; display:grid; place-items:center;
+ width:28px; height:28px; display:grid; place-items:center; cursor: pointer;
 }
+.inline-edit svg { color: #aaaaaa; transition: color 0.2s; }
+.inline-edit:hover svg { color: white; }
 .input-wrap{ position:relative }
 
 /* Links */
-.links{
- margin-top:12px; display:grid; gap:10px;
-}
+.links{ margin-top:12px; display:grid; gap:10px; }
 .links a{ color:var(--neon-purple); text-decoration:none; font-weight:700; }
 .links a:hover{ color:var(--neon-violet); }
 .danger{ color:#f87171 }
 
-/* Utilidades */
 .hide-sm{ display:initial }
 @media (max-width: 480px){ .hide-sm{ display:none } }
       `}</style>
@@ -150,19 +148,16 @@ body{
 
         <form className="search" role="search" aria-label="Buscar" onSubmit={(e) => e.preventDefault()}>
           <input type="search" placeholder="Buscar" aria-label="Buscar" />
-          <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-            <circle cx="11" cy="11" r="7"/>
-            <path d="M20 20 L16.65 16.65"/>
-          </svg>
+          <Search size={20} className="icon" />
         </form>
 
         <nav className="actions" aria-label="Acciones">
           <a href="#" aria-label="Perfil">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M6 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
+            <User size={22} />
             <span className="hide-sm">Perfil</span>
           </a>
           <a href="#" aria-label="Notificaciones">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M18 8a6 6 0 10-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+            <Bell size={22} />
             <span className="hide-sm">Notificaciones</span>
           </a>
         </nav>
@@ -174,16 +169,21 @@ body{
 
         <div className="profile-grid">
           <section className="card avatar" aria-label="Avatar">
-            <svg className="svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" strokeWidth="8" aria-hidden="true">
-              <circle cx="60" cy="42" r="20" />
-              <path d="M22,98 Q60,72 98,98" strokeLinecap="round"/>
-            </svg>
-            <button className="edit-fab" aria-label="Editar avatar" title="Editar avatar" type="button">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                <path d="M12 20h9"/>
-                <path d="M16.5 3.5l4 4L7 21l-4 1 1-4L16.5 3.5z"/>
-              </svg>
-            </button>
+            {avatar ? (
+              <img src={avatar} alt="Avatar de usuario" className="avatar-img" />
+            ) : (
+              <User size={120} className="avatar-placeholder" />
+            )}
+
+            <label className="edit-fab" aria-label="Editar avatar" title="Editar avatar">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                style={{ display: 'none' }}
+              />
+              <Edit2 size={18} />
+            </label>
           </section>
 
           <section className="card form" aria-label="Formulario de perfil">
@@ -192,9 +192,7 @@ body{
               <div className="input-wrap">
                 <input className="input" id="nombre" type="text" placeholder="Tu nombre" />
                 <span className="inline-edit" title="Editar" aria-hidden="true">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e5e7eb" strokeWidth="2">
-                    <path d="M12 20h9"/><path d="M16.5 3.5l4 4L7 21l-4 1 1-4L16.5 3.5z"/>
-                  </svg>
+                  <Edit2 size={18} />
                 </span>
               </div>
             </div>
@@ -204,9 +202,7 @@ body{
               <div className="input-wrap">
                 <input className="input" id="apellido" type="text" placeholder="Tu apellido" />
                 <span className="inline-edit" title="Editar" aria-hidden="true">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e5e7eb" strokeWidth="2">
-                    <path d="M12 20h9"/><path d="M16.5 3.5l4 4L7 21l-4 1 1-4L16.5 3.5z"/>
-                  </svg>
+                  <Edit2 size={18} />
                 </span>
               </div>
             </div>

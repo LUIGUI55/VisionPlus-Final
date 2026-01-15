@@ -1,10 +1,48 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import API_URL from "../../config";
 import "./Inicio.css";
 
 export default function Inicio() {
-
+  const [movies, setMovies] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    async function fetchMovies() {
+      try {
+        const token = localStorage.getItem('token');
+        const headers = { 'Authorization': `Bearer ${token}` };
+
+        // 1. Get List of Mapped Videos
+        const res = await fetch(`${API_URL}/videos/mapped`, { headers });
+        if (!res.ok) throw new Error("Failed to load mapped videos");
+        const mappedData = await res.json();
+
+        // 2. Enrich with TMDB Data
+        // We use Promise.allSettled to avoid failing everything if one TMDB lookup fails
+        const enrichedPromises = mappedData.map(async (vid) => {
+          try {
+            const tmdbRes = await fetch(`${API_URL}/movies/${vid.tmdbId}`, { headers });
+            if (tmdbRes.ok) {
+              const tmdbData = await tmdbRes.json();
+              return { ...vid, poster_path: tmdbData.poster_path, overview: tmdbData.overview };
+            }
+            return vid;
+          } catch (e) {
+            return vid;
+          }
+        });
+
+        const results = await Promise.all(enrichedPromises);
+        setMovies(results);
+
+      } catch (error) {
+        console.error("Error loading billboard:", error);
+      }
+    }
+
+    fetchMovies();
+  }, []);
 
 
   function goToPlayer() {
@@ -98,30 +136,29 @@ export default function Inicio() {
 
       { }
       <section className="inicio-section">
-        <h2>Demos disponibles</h2>
+        <h2>Mi Cartelera</h2>
 
         <div className="inicio-list">
-          {[
-            { id: 550, title: "Fight Club (Demo)" },
-            { id: 680, title: "Pulp Fiction (Demo)" },
-            { id: 278, title: "Shawshank (Demo)" },
-            { id: 999, title: "Sintel (Default)" },
-            { id: 101, title: "Venom" },
-            { id: 102, title: "Monsters of War" }
-          ].map((movie, index) => (
-            <div
-              className="inicio-movie"
-              key={index}
-              onClick={() => navigate(`/ver/${movie.id}`)}
-              style={{ cursor: 'pointer' }}
-            >
-              <img
-                src={`https://placehold.co/300x420/111111/FFFFFF?text=${encodeURIComponent(movie.title)}`}
-                alt={movie.title}
-              />
-              <div className="inicio-movie-title">{movie.title}</div>
-            </div>
-          ))}
+          {movies.length === 0 ? (
+            <div className="text-white ml-4">No hay películas agregadas aún.</div>
+          ) : (
+            movies.map((movie, index) => (
+              <div
+                className="inicio-movie"
+                key={movie.tmdbId || index}
+                onClick={() => navigate(`/detail/${movie.tmdbId}`)}
+                style={{ cursor: 'pointer' }}
+              >
+                <img
+                  src={movie.poster_path
+                    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                    : `https://placehold.co/300x420/111111/FFFFFF?text=${encodeURIComponent(movie.title || "Video")}`}
+                  alt={movie.title}
+                />
+                <div className="inicio-movie-title">{movie.title}</div>
+              </div>
+            ))
+          )}
         </div>
       </section>
 

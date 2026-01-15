@@ -29,7 +29,7 @@ import { SubscriptionsModule } from './subscriptions/subscriptions.module';
         }),
         ThrottlerModule.forRoot([{
             ttl: 60000,
-            limit: 10,
+            limit: 150,
         }]),
         AuthModule,
         MoviesModule, // modulo de peliculas con TMDB (costó configurarlo cawn)

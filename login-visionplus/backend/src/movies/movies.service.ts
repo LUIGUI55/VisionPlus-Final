@@ -1,10 +1,16 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
 
 @Injectable()
 export class MoviesService {
   private readonly tmdbApiUrl = 'https://api.themoviedb.org/3';
-  private readonly apiKey = process.env.TMDB_API_KEY; // Asegúrate de tener esto en .env
+  private readonly apiKey: string;
+
+  constructor(private configService: ConfigService) {
+    this.apiKey = this.configService.get<string>('TMDB_API_KEY');
+    console.log(`MovieService inited. API Key present: ${!!this.apiKey}, value: ${this.apiKey ? this.apiKey.substring(0, 4) + '***' : 'undefined'}`);
+  }
 
   private async tmdbRequest(endpoint: string, params: any = {}) {
     try {

@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from "react";
-
-const TrashIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-    <path d="M135.2 17.7C140.6 7.2 151.6 0 163.8 0h120.4c12.2 0 23.2 7.2 28.6 17.7L328 32H432c8.8 0 16 7.2 16 16s-7.2 
-        16-16 16h-16l-21.2 403.2c-1.3 24.3-21.3 44.8-45.6 44.8H99.8c-24.3 0-44.3-20.5-45.6-44.8L33 64H16C7.2 64 0 
-        56.8 0 48s7.2-16 16-16H120l15.2-14.3zM128 128v320c0 8.8 7.2 16 16 16h160c8.8 0 16-7.2 16-16V128H128z" />
-  </svg>
-);
-
+import { Trash2, Play } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const defaultItems = [
   {
@@ -43,6 +36,7 @@ const defaultsByName = Object.fromEntries(
 );
 
 const MiLista = ({ navigateToSearch }) => {
+  const navigate = useNavigate();
   const [items, setItems] = useState(() => {
     const savedList = localStorage.getItem("lista");
 
@@ -67,7 +61,6 @@ const MiLista = ({ navigateToSearch }) => {
             };
           }
 
-  
           return {
             ...item,
             tipo: item.tipo || "serie",
@@ -102,6 +95,17 @@ const MiLista = ({ navigateToSearch }) => {
       if (newItems.length === 0) setShowDeleteModal(false);
       return newItems;
     });
+  };
+
+  const handlePlay = (item) => {
+    // Logic for playing. If it has a bunnyVideoId or similar, go to player.
+    // Default items might not have IDs, so this is a best-effort link.
+    if (item.bunnyVideoId) {
+      navigate(`/ver/${item.bunnyVideoId}`);
+    } else {
+      // Fallback or alert for demo/default items
+      alert("Reproducción no disponible para este demo.");
+    }
   };
 
   const filteredItems = items.filter((item) => {
@@ -286,6 +290,8 @@ const MiLista = ({ navigateToSearch }) => {
           transition:transform 0.3s, box-shadow 0.3s;
           cursor:pointer;
           position:relative;
+          display: flex;
+          flex-direction: column;
         }
         .card:hover{
           transform:translateY(-6px);
@@ -296,9 +302,47 @@ const MiLista = ({ navigateToSearch }) => {
           height:260px;
           object-fit:cover;
         }
+        
+        .play-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 260px; /* same as img height */
+            background: rgba(0,0,0,0.4);
+            display: grid;
+            place-items: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .card:hover .play-overlay {
+            opacity: 1;
+        }
+        
+        .play-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(4px);
+            display: grid;
+            place-items: center;
+            border: 1px solid rgba(255,255,255,0.5);
+            transition: transform 0.2s;
+        }
+        
+        .play-circle:hover {
+            transform: scale(1.1);
+            background: var(--purple);
+            border-color: var(--purple);
+        }
 
         .card-info{
           padding:10px 12px 14px;
+          flex: 1;
+          display: flex;
+          flex-direction: column;
         }
         .card-title{
           margin:0 0 4px;
@@ -314,37 +358,39 @@ const MiLista = ({ navigateToSearch }) => {
           margin:0 0 4px;
           font-size:.8rem;
           color:var(--muted);
+          flex: 1;
         }
 
         .trash{
           position:fixed;
           bottom:40px;
           right:60px;
-          width:50px;
+          width:50px; /* Smaller */
           height:50px;
-          background:transparent;
-          border:2px solid var(--glow);
-          border-radius:10px;
+          background: rgba(157, 78, 221, 0.2); /* Transparent Purple */
+          backdrop-filter: blur(8px);
+          border:1px solid rgba(157, 78, 221, 0.4);
+          border-radius: 50%;
           display:flex;
           align-items:center;
           justify-content:center;
-          box-shadow:0 0 15px rgba(199,125,255,0.3);
+          box-shadow:0 4px 20px rgba(0,0,0,0.3);
           transition:0.3s;
           cursor:pointer;
+          z-index: 100;
         }
         .trash:hover{
-          background:var(--glow);
-          color:#fff;
+          background:var(--purple);
+          transform: scale(1.1) rotate(15deg);
           box-shadow:0 0 25px var(--glow);
+          border-color: transparent;
         }
         .trash svg{
-          width:26px;
-          height:26px;
-          fill:var(--glow);
+          color: #e8eaf0; /* Lighter icon by default for contrast on dark glass */
           transition:0.3s;
         }
         .trash:hover svg{
-          fill:white;
+          color:white;
         }
 
         .modal-bg{
@@ -353,7 +399,8 @@ const MiLista = ({ navigateToSearch }) => {
           left:0;
           width:100%;
           height:100%;
-          background:rgba(0,0,0,0.6);
+          background:rgba(0,0,0,0.8);
+          backdrop-filter: blur(5px);
           display:flex;
           align-items:center;
           justify-content:center;
@@ -362,13 +409,17 @@ const MiLista = ({ navigateToSearch }) => {
         .modal{
           background:var(--panel-2);
           padding:30px 40px;
-          border-radius:16px;
+          border-radius:24px;
           text-align:center;
-          box-shadow:0 0 25px rgba(199,125,255,0.4);
+          box-shadow:0 0 40px rgba(0,0,0,0.6);
+          border: 1px solid rgba(255,255,255,0.1);
+          max-width: 400px;
+          width: 90%;
         }
         .modal h2{
           margin-bottom:20px;
           color:var(--text);
+          font-size: 1.5rem;
         }
         .modal-buttons{
           display:flex;
@@ -376,14 +427,18 @@ const MiLista = ({ navigateToSearch }) => {
           gap:20px;
         }
         .modal button{
-          padding:10px 18px;
+          padding:12px 24px;
           border:none;
-          border-radius:10px;
+          border-radius:12px;
           cursor:pointer;
           font-weight:700;
+          transition: transform 0.2s;
+        }
+        .modal button:hover {
+            transform: scale(1.05);
         }
         .modal .confirm{
-          background:var(--purple);
+          background: linear-gradient(135deg, #ef4444, #dc2626);
           color:white;
         }
         .modal .cancel{
@@ -437,8 +492,16 @@ const MiLista = ({ navigateToSearch }) => {
         <div className="cards">
           {filteredItems.length > 0 ? (
             filteredItems.map((item, index) => (
-              <div key={index} className="card">
-                <img src={item.img} alt={item.nombre} />
+              <div key={index} className="card" onClick={() => handlePlay(item)}>
+                <div style={{ position: 'relative' }}>
+                  <img src={item.img} alt={item.nombre} />
+                  <div className="play-overlay">
+                    <div className="play-circle">
+                      <Play size={24} fill="white" color="white" style={{ marginLeft: '4px' }} />
+                    </div>
+                  </div>
+                </div>
+
                 <div className="card-info">
                   <p className="card-title">{item.nombre}</p>
 
@@ -476,7 +539,7 @@ const MiLista = ({ navigateToSearch }) => {
         title="Eliminar"
         onClick={() => setShowDeleteModal(true)}
       >
-        <TrashIcon />
+        <Trash2 size={24} />
       </div>
 
       {showDeleteModal && (
@@ -489,6 +552,8 @@ const MiLista = ({ navigateToSearch }) => {
                 flexDirection: "column",
                 gap: "10px",
                 marginBottom: "20px",
+                maxHeight: '60vh',
+                overflowY: 'auto'
               }}
             >
               {items.map((item, index) => (
@@ -504,15 +569,20 @@ const MiLista = ({ navigateToSearch }) => {
                     }
                   }}
                   style={{
-                    padding: "10px",
+                    padding: "16px",
                     background: "var(--panel)",
                     color: "var(--text)",
-                    border: "1px solid var(--glow)",
-                    borderRadius: "10px",
+                    border: "1px solid rgba(255,255,255,0.1)",
+                    borderRadius: "12px",
                     cursor: "pointer",
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    textAlign: 'left'
                   }}
                 >
-                  {item.nombre}
+                  <span>{item.nombre}</span>
+                  <Trash2 size={16} color="#ef4444" />
                 </button>
               ))}
             </div>
@@ -521,7 +591,7 @@ const MiLista = ({ navigateToSearch }) => {
                 className="cancel"
                 onClick={() => setShowDeleteModal(false)}
               >
-                Cancelar
+                Cerrar
               </button>
             </div>
           </div>

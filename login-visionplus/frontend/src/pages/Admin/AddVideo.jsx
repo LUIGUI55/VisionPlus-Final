@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import API_URL from '../../config';
+import { Lock, Unlock, Link } from 'lucide-react';
 
 const AddVideo = () => {
     // Auth State
@@ -11,7 +12,10 @@ const AddVideo = () => {
         tmdbId: '',
         bunnyVideoId: '',
         title: '',
-        libraryId: '579059'
+        libraryId: '579059',
+        type: 'movie',
+        season: '',
+        episode: ''
     });
     const [status, setStatus] = useState(null);
 
@@ -38,7 +42,10 @@ const AddVideo = () => {
                     tmdbId: parseInt(formData.tmdbId),
                     bunnyVideoId: formData.bunnyVideoId,
                     title: formData.title,
-                    libraryId: formData.libraryId
+                    libraryId: formData.libraryId,
+                    type: formData.type,
+                    season: formData.type === 'tv' ? parseInt(formData.season) : undefined,
+                    episode: formData.type === 'tv' ? parseInt(formData.episode) : undefined
                 })
             });
 
@@ -47,12 +54,14 @@ const AddVideo = () => {
                 setFormData({ ...formData, tmdbId: '', bunnyVideoId: '', title: '' });
             } else if (response.status === 403) {
                 setStatus({ type: 'error', msg: '⛔ Contraseña incorrecta.' });
-                setIsUnlocked(false); // Lock again on auth failure
+                setIsUnlocked(false);
             } else {
-                setStatus({ type: 'error', msg: '❌ Error al guardar. Verifica los datos.' });
+                const errorData = await response.json().catch(() => ({}));
+                const errorMsg = errorData.message || response.statusText;
+                setStatus({ type: 'error', msg: `❌ Error (${response.status}): ${errorMsg}` });
             }
         } catch (error) {
-            setStatus({ type: 'error', msg: '❌ Error de conexión.' });
+            setStatus({ type: 'error', msg: `❌ Error de conexión: ${error.message}` });
         }
     };
 
@@ -106,7 +115,11 @@ const AddVideo = () => {
             background: 'linear-gradient(to right, #c084fc, #ec4899)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
-            textAlign: 'center'
+            textAlign: 'center',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '10px'
         },
         subtitle: {
             color: '#9ca3af',
@@ -153,7 +166,11 @@ const AddVideo = () => {
             borderRadius: '0.5rem',
             cursor: 'pointer',
             fontSize: '1rem',
-            marginTop: '1rem'
+            marginTop: '1rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px'
         },
         status: {
             marginTop: '1.5rem',
@@ -173,7 +190,9 @@ const AddVideo = () => {
 
             <div style={styles.content}>
                 <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-                    <h1 style={styles.title}>VisionPlus Admin</h1>
+                    <h1 style={styles.title}>
+                        VisionPlus Admin
+                    </h1>
                     <p style={styles.subtitle}>
                         {isUnlocked ? 'Conectar contenido a la plataforma' : 'Acceso Restringido'}
                     </p>
@@ -183,8 +202,8 @@ const AddVideo = () => {
                     {!isUnlocked ? (
                         // LOCK SCREEN
                         <form onSubmit={handleUnlock}>
-                            <div style={{ marginBottom: '1.5rem', textAlign: 'center' }}>
-                                <span style={{ fontSize: '3rem' }}>🔒</span>
+                            <div style={{ marginBottom: '1.5rem', textAlign: 'center', color: '#db2777' }}>
+                                <Lock size={64} />
                             </div>
                             <div>
                                 <label style={styles.label}>Contraseña de Administrador</label>
@@ -198,23 +217,62 @@ const AddVideo = () => {
                                 />
                             </div>
                             <button type="submit" style={styles.button}>
-                                Desbloquear
+                                <Unlock size={20} /> Desbloquear
                             </button>
                         </form>
                     ) : (
                         // ADMIN FORM
                         <form onSubmit={handleSubmit}>
                             <div>
-                                <label style={styles.label}>ID TMDB</label>
+                                <label style={styles.label}>Tipo de Contenido</label>
+                                <select
+                                    style={{ ...styles.input, cursor: 'pointer' }}
+                                    value={formData.type}
+                                    onChange={e => setFormData({ ...formData, type: e.target.value })}
+                                >
+                                    <option value="movie">Película</option>
+                                    <option value="tv">Serie (TV Show)</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label style={styles.label}>{formData.type === 'tv' ? 'ID de la Serie (TV Show)' : 'ID de la Película (TMDB)'}</label>
                                 <input
                                     type="number"
                                     required
-                                    placeholder="Ej: 550"
+                                    placeholder={formData.type === 'tv' ? "Ej: 46260 (Naruto)" : "Ej: 550 (Fight Club)"}
                                     style={styles.input}
                                     value={formData.tmdbId}
                                     onChange={e => setFormData({ ...formData, tmdbId: e.target.value })}
                                 />
                             </div>
+
+                            {formData.type === 'tv' && (
+                                <div style={{ display: 'flex', gap: '1rem' }}>
+                                    <div style={{ flex: 1 }}>
+                                        <label style={styles.label}>Temporada #</label>
+                                        <input
+                                            type="number"
+                                            required
+                                            placeholder="1"
+                                            style={styles.input}
+                                            value={formData.season}
+                                            onChange={e => setFormData({ ...formData, season: e.target.value })}
+                                        />
+                                    </div>
+                                    <div style={{ flex: 1 }}>
+                                        <label style={styles.label}>Episodio #</label>
+                                        <input
+                                            type="number"
+                                            required
+                                            placeholder="1"
+                                            style={styles.input}
+                                            value={formData.episode}
+                                            onChange={e => setFormData({ ...formData, episode: e.target.value })}
+                                        />
+                                    </div>
+                                </div>
+                            )}
 
                             <div>
                                 <label style={styles.label}>Título de Referencia</label>
@@ -251,7 +309,7 @@ const AddVideo = () => {
                             </div>
 
                             <button type="submit" style={styles.button}>
-                                🔗 Conectar Video
+                                <Link size={20} /> Conectar Video
                             </button>
                         </form>
                     )}

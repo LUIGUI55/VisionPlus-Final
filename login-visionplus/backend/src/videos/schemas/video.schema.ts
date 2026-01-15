@@ -5,17 +5,26 @@ export type VideoDocument = Video & Document;
 
 @Schema()
 export class Video {
-    @Prop({ required: true, unique: true })
-    tmdbId: number; // ID de la película en TMDB (ej: 550 para Fight Club)
+    @Prop({ required: true, index: true }) // Quitamos unique: true para permitir episodios
+    tmdbId: number;
 
     @Prop({ required: true })
-    bunnyVideoId: string; // ID del video en Bunny.net Stream
+    bunnyVideoId: string;
 
     @Prop({ required: true })
-    libraryId: string; // Library ID de Bunny.net (generalmente 579059)
+    libraryId: string;
 
     @Prop()
-    title: string; // Título referencia (opcional)
+    title: string;
+
+    @Prop({ enum: ['movie', 'tv'], default: 'movie' })
+    type: string;
+
+    @Prop()
+    season?: number;
+
+    @Prop()
+    episode?: number;
 }
 
 export const VideoSchema = SchemaFactory.createForClass(Video);
