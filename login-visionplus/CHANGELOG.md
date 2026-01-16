@@ -21,6 +21,7 @@ Este documento rastrea la evolución del proyecto desde su inicio hasta la versi
 
 - Se corrigió un error de sintaxis en `VideoPlayer.jsx` que impedía la compilación.
 - Se solucionaron conflictos de dependencias (`peer-deps`) al instalar NestJS Serve Static.
+- **Hotfix Despliegue**: Se ajustó la configuración de Vite (`base: './'`) y el `Dockerfile` del frontend para resolver correctamente las rutas en entornos Linux/Cloud.
 
 ---
 

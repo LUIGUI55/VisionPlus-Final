@@ -56,26 +56,24 @@ Para que cualquier persona pueda ver tu proyecto desde su casa.
 
 Recomiendo usar **Railway** (railway.app) porque detecta automáticamente nuestra configuración Docker.
 
-### Paso 1: Crear Servicios en Railway
+### Paso 1: Configurar Servicios en Railway (Esquema Monorepo)
 
-1. Entra a Railway y selecciona "New Project" -> "Deploy from GitHub repo".
-2. Selecciona tu repositorio `VisionPlus-Final`.
+Como tu proyecto tiene Backend y Frontend en la misma carpeta, necesitas crear **DOS** servicios separados en Railway:
 
-### Paso 2: Configurar Backend
+1. **Servicio Backend**:
+    - Conecta tu repo.
+    - Ve a **Settings -> Root Directory**.
+    - Escribe: `/backend`.
+    - En **Variables**: Agrega `MONGO_URI`, `JWT_SECRET`, `TMDB_API_KEY`.
+    - *Este servicio te dará una URL pública (ej. <https://tu-backend.up.railway.app>)*.
 
-1. Agrega un servicio conectado al repo.
-2. En **Settings** -> **Root Directory**, escribe: `/backend`.
-3. En **Variables**, agrega tus secretos: `MONGO_URI`, `JWT_SECRET`, `TMDB_API_KEY`.
-4. Railway detectará el `Dockerfile` y levantará el Cluster.
-5. Railway te dará una URL (ej. `https://backend-production.up.railway.app`).
-
-### Paso 3: Configurar Frontend
-
-1. Agrega otro servicio conectado al mismo repo.
-2. En **Settings** -> **Root Directory**, escribe: `/frontend`.
-3. En **Variables**, agrega:
-    `VITE_API_URL` = `https://backend-production.up.railway.app` (La URL que obtuviste en el paso anterior).
-4. Railway desplegará el frontend y te dará tu URL final (ej. `https://visionplus.up.railway.app`).
+2. **Servicio Frontend**:
+    - Vuelve al Dashboard y crea un **Nuevo Servicio** conectando el **MISMO repo**.
+    - Ve a **Settings -> Root Directory**.
+    - Escribe: `/frontend`.
+    - Ve a **Variables** y agrega:
+      - `VITE_API_URL`: Pega aquí la dirección pública de tu Backend (Ej. `https://tu-backend.up.railway.app`).
+    - Railway detectará tu configuración y desplegará la web.
 
 ¡Listo! Comparte esa última URL con tu profesor.
 
