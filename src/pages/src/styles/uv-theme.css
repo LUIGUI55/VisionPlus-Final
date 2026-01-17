@@ -1,0 +1,25 @@
+:root{
+  --bg-obsidian: #0f1116;   
+  --bg-obsidian-dark: #0c0e13;
+  --surface-dark: #151924;
+  --border-weak: rgba(255,255,255,.06);
+  --text: #e8e9ee;
+}
+html, body, #root{
+  background: var(--bg-obsidian) !important;
+  color: var(--text);
+}
+.hero-obsidian{
+  position: relative;
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--bg-obsidian) 80%, #1a1d27) 0%,
+      var(--bg-obsidian) 60%);
+}
+.card-dark, .panel-dark, .player{
+  background: linear-gradient(180deg, var(--surface-dark), var(--bg-obsidian-dark));
+  border: 1px solid var(--border-weak);
+  border-radius: 16px;
+  box-shadow: 0 10px 24px rgba(0,0,0,.45);
+}
+

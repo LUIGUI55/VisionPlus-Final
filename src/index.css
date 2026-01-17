@@ -1,0 +1,35 @@
+:root {
+  font-family: "Nunito Sans", system-ui, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: dark;
+  color: #e8eaf0;
+  background-color: #0e1117;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: #0e1117;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  background-color: #9d4edd;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #b388ff;
+}
+
+.vp-footer {
+  margin-top: 32px;
+  padding: 24px;
+  border-top: 1px solid rgba(157, 78, 221, 0.2);
+  text-align: center;
+  color: #aeb3c2;
+}

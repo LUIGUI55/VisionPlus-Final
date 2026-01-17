@@ -1,0 +1,292 @@
+:root {
+  --vpp-bg: #0e1117;
+  --vpp-panel: #141925;
+  --vpp-panel-2: #1a2030;
+  --vpp-purple: #9d4edd;
+  --vpp-purple-2: #7b2cbf;
+  --vpp-text: #e8eaf0;
+  --vpp-muted: #aeb3c2;
+  --vpp-line: #3b4454;
+}
+.vpp-body {
+  margin: 0;
+  color: var(--vpp-text);
+  background:
+    radial-gradient(1000px 600px at 50% -10%, rgba(199, 125, 255, .12), transparent 70%),
+    var(--vpp-bg);
+  font-family: "Nunito Sans", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+.vpp-header {
+  height: 72px;
+  grid-template-columns: 200px auto 1fr auto; 
+  display: grid; 
+  align-items: center;
+  gap: 16px;
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, .55), rgba(0, 0, 0, 0)), var(--vpp-panel);
+  border-bottom: 1px solid rgba(199, 125, 255, .20);
+}
+
+.vpp-brand {
+  font-weight: 900;
+  letter-spacing: .8px;
+  font-size: 1.6rem;
+  color: var(--vpp-purple);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.logo-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: var(--vpp-purple);
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+/* --- VPP-NAV: NAVEGACIÓN (Inicio, Mi Plan) --- */
+.vpp-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 800;
+  justify-content: flex-start;
+}
+
+/* Estilo por defecto de los enlaces de navegación */
+.vpp-nav a {
+  color: #c9cbd1;
+  text-decoration: none;
+  padding: 0.35rem 0.85rem; 
+  border-radius: 10px;
+  transition: .2s;
+  cursor: pointer;
+  line-height: 40px; 
+  height: 40px;
+  box-sizing: border-box;
+}
+
+.vpp-nav a.active {
+    color: var(--vpp-text);
+    background: rgba(157, 78, 221, 0.5); 
+    box-shadow: 0 0 10px rgba(157, 78, 221, 0.3);
+    font-weight: 900; 
+}
+
+.vpp-nav a:hover:not(.active) { 
+  color: var(--vpp-text);
+  background: rgba(157, 78, 221, .15);
+}
+
+.vpp-search {
+  display: flex; 
+  align-items: center; 
+  gap: 8px;
+  background: var(--vpp-panel-2); 
+  padding: 6px 10px; 
+  border-radius: 999px; 
+  border: 1.5px solid rgba(199, 125, 255, .22); 
+  width: min(520px, 100%); 
+  height: 40px;
+  box-sizing: border-box; 
+  justify-self: center; 
+}
+
+.vpp-search input {
+  flex: 1;
+  border: 0;
+  background: transparent;
+  outline: none;
+  color: var(--vpp-text);
+  font-weight: 700;
+  padding: 0; 
+  font-size: 15px;
+}
+
+.vpp-search .vpp-btn {
+  width: 28px; 
+  height: 28px; 
+  display: grid; 
+  place-items: center;
+  border-radius: 999px; 
+  background: var(--vpp-purple);
+  color: #fff; 
+  border: 0; 
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* --- VPP-USER-ACTIONS: PERFIL / NOTIFICACIONES (Far Right) --- */
+.vpp-user-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Espacio entre los botones de acción */
+    font-weight: 600;
+    justify-self: end; 
+}
+
+.vpp-user-actions a {
+    color: #c9cbd1;
+    text-decoration: none;
+    transition: all 0.2s;
+    cursor: pointer;
+    padding: 0.35rem 0.85rem;
+    border-radius: 10px;
+    line-height: 40px;
+    height: 40px;
+    box-sizing: border-box;
+}
+
+/* Estilo de BOTÓN DE ACCIÓN ACTIVO (ej. Notificaciones) */
+.vpp-user-actions a.active {
+    color: var(--vpp-text);
+    background: var(--vpp-purple); /* Fondo púrpura sólido */
+    font-weight: 800;
+}
+
+.vpp-user-actions a:hover:not(.active) {
+    color: var(--vpp-text);
+    background: rgba(157, 78, 221, .15);
+}
+
+/* --- CONTENIDO PRINCIPAL Y PLANES (Sin cambios relevantes) --- */
+
+.vpp-wrap {
+  width: min(1100px, 92%);
+  margin: 24px auto 64px auto;
+  border: 1px solid var(--vpp-line);
+  border-radius: 12px;
+  padding: 18px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, .02), transparent 40%), var(--vpp-panel);
+}
+
+.vpp-section-head h2 {
+  margin: 0 0 8px 0;
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--vpp-text);
+}
+
+.vpp-hr {
+  height: 1px;
+  background: #9ca3af44;
+  border-radius: 1px;
+  margin-bottom: 24px;
+}
+
+.vpp-pricing {
+  padding: 28px 14px 10px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.vpp-card {
+  background: var(--vpp-panel-2);
+  border: 1.5px solid rgba(199, 125, 255, .18);
+  border-radius: 14px;
+  padding: 22px 20px;
+}
+
+.vpp-card header {
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.vpp-card .icon {
+  width: 26px;
+  height: 26px;
+  border: 2px solid var(--vpp-text);
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+  margin: auto;
+}
+
+.vpp-card h3 {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: var(--vpp-purple);
+}
+
+.vpp-features {
+  margin-top: 10px;
+  color: var(--vpp-muted);
+  font-size: .95rem;
+}
+
+.vpp-features li {
+  margin: .35rem 0;
+  list-style: "-  ";
+}
+
+.vpp-card-footer { 
+  display: grid;
+  place-items: center;
+  margin-top: 25px;
+}
+
+.vpp-btn-select {
+  appearance: none;
+  border: 0;
+  cursor: pointer;
+  font-weight: 900;
+  padding: .9rem 1.25rem;
+  border-radius: 10px;
+  background: var(--vpp-purple);
+  color: #fff;
+  width: min(280px, 100%);
+  transition: background .2s;
+}
+
+.vpp-btn-select:hover {
+  background: var(--vpp-purple-2);
+}
+
+.vpp-note {
+  padding: 28px 14px;
+  font-weight: 900;
+  font-size: 1.25rem;
+  color: var(--vpp-purple);
+}
+
+@media (max-width: 980px) {
+  .vpp-pricing {
+    grid-template-columns: 1fr;
+  }
+}
+.vpp-back-btn {
+  margin-top: 30px;
+  background: transparent;
+  border-radius: 999px;
+  border: 1px solid rgba(199, 125, 255, 0.4);
+  color: var(--i-text);
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.2s;
+  display: inline-block;
+}
+
+.vpp-back-btn:hover {
+  background: rgba(199, 125, 255, 0.12);
+  border-color: var(--i-purple);
+}
+.vpp-wrap {
+  max-width: 1200px; 
+  margin: 0 auto;
+  padding: 20px;
+}
+.vpp-price{
+  margin-top: 8px;
+  font-size: 22px;
+  font-weight: 700;
+  color: #a855f7; 
+}

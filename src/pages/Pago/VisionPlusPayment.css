@@ -1,0 +1,313 @@
+
+:root {
+  --bg-dark: #0f131c; 
+  --bg-card: #141820;
+  --bg-input: #393b40; 
+  --text-light: #e5e7eb;
+  --neon-purple: #9d4edd; 
+  --neon-violet: #7b2cbf;
+  --line-color: #3b4454; 
+  --i-panel: #0a0b0d; 
+  --translucent-border: rgba(22, 22, 22, 0.16);
+  --i-bg: var(--bg-dark); 
+  --i-panel2: var(--bg-card); 
+  --i-text: var(--text-light); 
+  --i-purple: var(--neon-purple); 
+  --i-purple2: var(--neon-violet); 
+  --i-glow: #c77dff; 
+  --i-muted: #aeb3c2;
+}
+
+.vpay-page{
+ min-height:100vh;
+ background:
+ radial-gradient(1000px 600px at 50% -10%, rgba(199,125,255,.12), transparent 70%),
+ var(--i-bg);
+ color:var(--i-text);
+ font-family:"Nunito Sans", sans-serif;
+}
+
+.vpay-main{
+ padding:40px 50px 60px;
+}
+
+.vpay-panel{
+ max-width:1050px;
+ margin:0 auto;
+ background:var(--i-panel);
+ border-radius:18px;
+ padding:26px 28px 32px;
+ box-shadow:0 24px 70px rgba(0,0,0,.65);
+}
+
+.vpay-header h2{
+ margin:0 0 8px;
+ font-size:1.8rem;
+}
+.vpay-header p{
+ margin:0 0 22px;
+ color:var(--i-muted);
+}
+
+.vpay-layout{
+ display:grid;
+ grid-template-columns:320px minmax(0,1fr);
+ gap:26px;
+}
+
+/* Resumen */
+.vpay-summary h3{
+ margin:0 0 12px;
+}
+.vpay-summary-card{
+ background:var(--i-panel2);
+ border-radius:14px;
+ padding:16px 18px;
+ border:1px solid rgba(199,125,255,.35);
+}
+.vpay-summary-title{
+ font-weight:800;
+ color:var(--i-glow);
+ margin-bottom:10px;
+}
+.vpay-summary-card ul{
+ list-style:none;
+ padding:0;
+ margin:0;
+ color:var(--i-muted);
+}
+.vpay-summary-card li{
+ margin-bottom:6px;
+}
+
+.vpay-back{
+ margin-top:16px;
+ background:transparent;
+ border-radius:999px;
+ border:1px solid rgba(199,125,255,.4);
+ color:var(--i-text);
+ padding:8px 16px;
+ cursor:pointer;
+ font-weight:600;
+}
+.vpay-back:hover{
+ background:rgba(199,125,255,.12);
+}
+
+.vpay-form-wrap{
+ display:flex;
+ align-items:stretch;
+}
+.vpay-form{
+ width:100%;
+}
+.vpay-methods{
+ display:flex;
+ gap:10px;
+ margin-bottom:18px;
+ flex-wrap:wrap;
+}
+.vpay-methods button{
+ flex:1;
+ min-width:140px;
+ background:var(--i-panel2);
+ border-radius:999px;
+ border:1px solid rgba(199,125,255,.35);
+ color:var(--i-text);
+ padding:8px 12px;
+ font-weight:600;
+ cursor:pointer;
+}
+.vpay-methods .active{
+ background:linear-gradient(90deg,var(--i-purple),var(--i-purple2));
+ border:none;
+}
+
+.vpay-field{
+ display:flex;
+ flex-direction:column;
+ gap:4px;
+ margin-bottom:14px;
+}
+.vpay-field label{
+ font-size:.9rem;
+ color:var(--i-muted);
+}
+.vpay-field input,
+.vpay-field select{
+ background:var(--i-panel2);
+ border-radius:10px;
+ border:1px solid rgba(255,255,255,.12);
+ padding:10px 12px;
+ color:var(--i-text);
+ outline:none;
+}
+
+.vpay-row{
+ display:flex;
+ gap:14px;
+}
+.vpay-row .vpay-field{
+ flex:1;
+}
+
+.vpay-submit{
+ margin-top:8px;
+ width:100%;
+ border:none;
+ border-radius:999px;
+ padding:12px 18px;
+ font-weight:800;
+ cursor:pointer;
+ background:linear-gradient(90deg,var(--i-purple),var(--i-purple2));
+ color:white;
+}
+.vpay-submit:hover{
+ filter:brightness(1.05);
+}
+.vpay-safe-text{
+ margin-top:8px;
+ font-size:.8rem;
+ color:var(--i-muted);
+}
+.vp-footer{
+ margin-top:32px;
+ padding-top:16px;
+ border-top:1px solid rgba(199,125,255,.3);
+ color:var(--i-muted);
+ font-size:.85rem;
+ text-align:center;
+}
+
+@media (max-width:900px){
+ .vpay-main{
+ padding:24px 16px 40px;
+ }
+ .vpay-panel{
+ padding:20px 16px 26px;
+ }
+ .vpay-layout{
+ grid-template-columns:1fr;
+ }
+}
+.inicio-navbar{
+ display: flex;
+ align-items: center;
+ gap: 20px;
+ background: var(--i-panel);
+ padding: 10px 24px;
+ border-bottom: 1px solid var(--translucent-border);
+ position: sticky;
+ top: 0;
+ z-index: 40;
+ width: 100%;
+}
+
+.inicio-logo.brand{
+ font-weight: 900;
+ font-size: 1.25rem; 
+ display: flex;
+ align-items: center;
+ color: var(--i-purple);
+ text-transform: uppercase;
+ margin-right: 16px;
+ cursor: pointer;
+ user-select: none;
+}
+
+.inicio-logo.brand::before{
+ content: "";
+ display: block;
+ width: 23px;
+ height: 23px;
+ border-radius: 8px;
+ background-color: var(--i-purple);
+ margin-right: 6px;
+ box-shadow: 0 0 15px 5px rgba(157, 78, 221, 0.964);
+}
+
+/* Links Inicio / Mi Plan */
+.inicio-nav{
+ display: flex;
+ gap: 12px;
+}
+
+.inicio-nav a{
+ padding: 6px 10px;
+ border-radius: 6px;
+ text-decoration: none;
+ cursor: pointer;
+ color: var(--i-text);
+ transition: all 0.2s;
+ outline: 2px solid transparent;
+}
+
+.inicio-nav a.active{
+background: rgba(157, 78, 221, 0.15);
+ outline: 2px solid var(--i-purple);
+}
+
+.inicio-nav a:hover{
+ outline: 2px solid var(--i-purple);
+}
+.inicio-search-box{
+ display: flex;
+ align-items: center;
+ gap: 6px;
+ margin: auto;
+ background: var(--i-panel2);
+ border: 1px solid var(--translucent-border);
+ padding: 4px 8px;
+ border-radius: 999px;
+ cursor: pointer;
+ height: 38px;
+ max-width: 350px;
+}
+
+.inicio-search-box input{
+ background: transparent;
+ border: none;
+ color: var(--i-text);
+ outline: none;
+ flex: 1;
+ font-size: 0.95rem;
+}
+
+.inicio-search-box button{
+ background: transparent;
+ border: none;
+ color: var(--i-text);
+ font-size: 1.1rem;
+cursor: pointer;
+ padding: 0;
+ filter: drop-shadow(0 0 4px #8c88ff);
+}
+
+.inicio-user{
+ display: flex;
+ gap: 16px;
+ margin-left: 20px;
+}
+
+.inicio-user div{
+ padding: 6px 10px;
+ border-radius: 6px;
+ cursor: pointer;
+ outline: 2px solid transparent;
+ transition: outline 0.2s;
+ font-weight: 500;
+ font-size: 1rem;
+ color: var(--i-text);
+}
+
+.inicio-user div:hover{
+ outline: 2px solid var(--i-purple);
+}
+
+/* Responsive igual al ejemplo */
+@media (max-width: 1024px) {
+ .inicio-search-box { display: none; }
+}
+@media (max-width: 768px) {
+ .inicio-nav { display: none; }
+}
