@@ -61,7 +61,7 @@ export const moviesService = {
     },
     getMappedMovies: async () => { return []; },
     getStreamUrl: async (id) => {
-        const response = await api.get(`/movies/${id}/stream`);
+        const response = await api.get(`/videos/${id}/stream`);
         return response.data;
     },
     getVideoDetails: async (id) => {
