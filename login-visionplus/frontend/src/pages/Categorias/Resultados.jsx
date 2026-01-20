@@ -1,45 +1,39 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import "./Resultados.css";
-import { moviesService } from "../../services/api";
+import { moviesService } from "../../services/api.js";
 
 const Resultados = () => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [peliculas, setPeliculas] = useState([]);
 
-  const [searchParams] = useSearchParams(); // Requires import
-  const query = searchParams.get("q");
-
   useEffect(() => {
     setIsOpen(true);
 
+    const searchParams = new URLSearchParams(window.location.search);
+    const query = searchParams.get("q");
+
     if (query) {
-      const fetchResults = async () => {
-        try {
-          const results = await moviesService.searchMovies(query);
-          // Mapeamos los resultados de TMDB para que tengan 'img' y 'titulo'
-          const formatted = results.map(p => ({
-            titulo: p.title || p.name, // TMDB usa 'title' para pelis, 'name' para series
-            img: p.poster_path
-              ? `https://image.tmdb.org/t/p/w300${p.poster_path}`
-              : "https://placehold.co/300x450/111111/FFFFFF?text=No+Poster",
-            id: p.id // ID de TMDB
-          }));
-          setPeliculas(formatted);
-        } catch (error) {
-          console.error("Error searching:", error);
-          setPeliculas([]);
-        }
-      };
+      async function fetchResults() {
+        const results = await moviesService.searchMovies(query);
+        // Map TMDB results to local format if needed, or use directly if adaptable
+        // Assuming TMDB returns { title, poster_path, id }
+        const mapped = results.map(m => ({
+          titulo: m.title,
+          img: m.poster_path ? `https://image.tmdb.org/t/p/w500${m.poster_path}` : "https://placehold.co/300x450/333/FFF?text=No+Image",
+          id: m.id
+        }));
+        setPeliculas(mapped);
+      }
       fetchResults();
+    } else {
+      // Fallback or empty
+      setPeliculas([]);
     }
 
     document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = "unset";
     };
-  }, [query]);
+  }, []);
 
   const closeResultados = () => {
     setIsOpen(false);

@@ -1,27 +1,8 @@
-import { useNavigate, useParams } from "react-router-dom";
-import React from "react";
-import { moviesService } from "../../../services/api";
+import { useNavigate } from "react-router-dom";
 import "./VisionPlusDetail.css";
 
 export default function VisionPlusDetail() {
   const navigate = useNavigate();
-  const { id } = useParams();
-  const [movie, setMovie] = React.useState(null);
-
-  React.useEffect(() => {
-    if (!id) return;
-    const fetchDetail = async () => {
-      try {
-        const data = await moviesService.getVideoDetails(id);
-        setMovie(data);
-      } catch (error) {
-        console.error("Error fetching detail:", error);
-      }
-    };
-    fetchDetail();
-  }, [id]);
-
-  if (!movie) return <div className="wrap">Cargando...</div>;
 
   return (
     <>
@@ -61,7 +42,7 @@ export default function VisionPlusDetail() {
           { }
           <aside className="left">
             <figure className="poster">
-              <img src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : "https://placehold.co/300x450"} alt={movie.title} />
+              <img src="" alt="Poster" />
             </figure>
             <div className="actions">
               <button className="act-btn">➕ Agregar a… <small>Mi lista</small></button>
@@ -71,32 +52,34 @@ export default function VisionPlusDetail() {
 
           <section>
             <header className="panel detail-hero">
-              <div className="bg" style={{ backgroundImage: movie.backdrop_path ? `url('https://image.tmdb.org/t/p/original${movie.backdrop_path}')` : "none" }}></div>
+              <div className="bg" style={{ backgroundImage: "url('')" }}></div>
               <div className="title">
-                <h1>{movie.title}</h1><span className="year">({movie.release_date ? movie.release_date.substring(0, 4) : 'N/A'})</span>
+                <h1>Prueba</h1><span className="year">(2025)</span>
               </div>
               <div className="meta-row">
-                <span className="rating"><span className="dot"></span> {movie.vote_average ? movie.vote_average.toFixed(1) : '0'} • HD</span>
-                {movie.genres && movie.genres.map(g => <span className="pill" key={g.id}>{g.name}</span>)}
+                <span className="rating"><span className="dot"></span> 56% • 98 min • HD</span>
+                <span className="pill">Terror</span>
+                <span className="pill">Suspense</span>
+                <span className="pill">EN / LAT</span>
               </div>
-              <p className="syn">{movie.overview}</p>
+              <p className="syn">Descripcion</p>
             </header>
 
             <div className="bar">
               <div className="row">
                 <div className="tag"><span className="dot"></span> Latino <small style={{ opacity: .7 }}>CALIDAD HD</small></div>
-
+                <div className="tag"><span className="dot"></span> Descargar <small style={{ opacity: .7 }}>CALIDAD HD</small></div>
               </div>
             </div>
 
-            <div className="player" onClick={() => navigate(`/ver/${id}`)}>
+            <div className="player" onClick={() => navigate("/ver/strangers2")}>
               <div className="ph"></div>
             </div>
 
             <section className="features">
             </section>
 
-
+           
           </section>
 
           { }
@@ -105,7 +88,7 @@ export default function VisionPlusDetail() {
               <div className="tabs">
                 <button className="tab active">Actualizado</button>
                 <button className="tab">Últimas</button>
-              </div>
+              </div>  
             </div>
           </aside>
         </div>

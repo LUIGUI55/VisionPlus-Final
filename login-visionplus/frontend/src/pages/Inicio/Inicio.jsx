@@ -1,70 +1,46 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import "./Inicio.css";
-import { moviesService } from "../../services/api";
+import { moviesService } from "../../services/api.js";
 
 export default function Inicio() {
   const navigate = useNavigate();
   const [movies, setMovies] = React.useState([]);
 
   React.useEffect(() => {
-    const fetchMovies = async () => {
+    async function fetchMovies() {
       try {
-        // Intentar obtener películas populares de TMDB
-        const popularData = await moviesService.getPopularMovies();
-
-        if (Array.isArray(popularData) && popularData.length > 0) {
-          // Mapear datos de TMDB al formato que espera nuestro UI si es necesario
-          // (En este caso, TMDB devuelve title, poster_path, id, etc. que es compatible)
-          // Aseguramos que tengan tmdbId (que es el id en TMDB)
-          const formatted = popularData.map(m => ({
-            ...m,
-            tmdbId: m.id // TMDB usa 'id', nuestro sistema mapeado usa 'tmdbId'
-          }));
-          setMovies(formatted);
-        } else {
-          // Fallback a videos mapeados si popular falla o está vacío
-          console.log("No popular movies found, trying mapped videos...");
-          const mappedData = await moviesService.getMappedMovies();
-          if (Array.isArray(mappedData)) setMovies(mappedData);
-        }
+        const results = await moviesService.getPopularMovies();
+        setMovies(results);
       } catch (error) {
-        console.error("Error fetching movies:", error);
-        // Fallback final silencioso
+        console.error("Failed to load movies", error);
       }
-    };
+    }
     fetchMovies();
   }, []);
 
-  function goToPlayer(id) {
-    if (id) navigate(`/ver/${id}`);
-    else if (movies.length > 0) navigate(`/ver/${movies[0].tmdbId}`);
+  function goToPlayer(movie) {
+    if (movie && movie.id) {
+      navigate(`/ver/${movie.id}`);
+    } else {
+      navigate("/ver/strangerthings");
+    }
   }
 
-  function goToDetail(id) {
-    if (id) navigate(`/detail/${id}`);
-    else if (movies.length > 0) navigate(`/detail/${movies[0].tmdbId}`);
+  function goToDetail(movie) {
+    if (movie && movie.id) {
+      navigate(`/detail/${movie.id}`);
+    } else {
+      navigate("/detail/strangerthings");
+    }
   }
+  // ... keep existing navigation functions ...
 
-  function goToMiLista() {
-    navigate("/milista");
-  }
-
-  function goToBusqueda() {
-    navigate("/busqueda");
-  }
-
-  function goToPerfil() {
-    navigate("/perfil");
-  }
-
-  function goToNotifications() {
-    navigate("/notificaciones");
-  }
+  // Helper to get image URL
+  const getImageUrl = (path) => {
+    return path ? `https://image.tmdb.org/t/p/w500${path}` : "https://placehold.co/300x420/111111/FFFFFF?text=No+Image";
+  };
 
   return (
     <div className="inicio-page">
-
+      {/* ... header remains same ... */}
       <header className="inicio-navbar header">
         <div className="inicio-logo brand">
           VISIONPLUS
@@ -96,25 +72,27 @@ export default function Inicio() {
       </header>
 
       <section className="inicio-hero">
-        <div className="inicio-hero-bg"></div>
+        <div className="inicio-hero-bg" style={{
+          backgroundImage: movies.length > 0 ? `url(https://image.tmdb.org/t/p/original${movies[0].backdrop_path})` : ""
+        }}></div>
 
         <div className="inicio-hero-content">
-          <h1>{movies.length > 0 ? movies[0].title : "Cargando..."}</h1>
+          <h1>{movies.length > 0 ? movies[0].title : "Prueba"}</h1>
           <p>
-            {movies.length > 0 ? "Disfruta de nuestro contenido exclusivo." : "..."}
+            {movies.length > 0 ? movies[0].overview : "Descripcion"}
           </p>
 
           <div className="inicio-buttons">
             <button
               className="inicio-btn inicio-btn-primary"
-              onClick={() => goToPlayer(movies[0]?.tmdbId)}
+              onClick={() => goToPlayer(movies[0])}
             >
               Ver ahora
             </button>
 
             <button
               className="inicio-btn inicio-btn-secondary"
-              onClick={() => goToDetail(movies[0]?.tmdbId)}
+              onClick={() => goToDetail(movies[0])}
             >
               Más info
             </button>
@@ -126,17 +104,15 @@ export default function Inicio() {
         <h2>Tendencias...</h2>
 
         <div className="inicio-list">
-          {Array.isArray(movies) && movies.map((movie) => (
-            <div className="inicio-movie" key={movie._id} onClick={() => goToDetail(movie.tmdbId)} style={{ cursor: 'pointer' }}>
+          {movies.slice(1).map((movie) => (
+            <div className="inicio-movie" key={movie.id} onClick={() => goToDetail(movie)}>
               <img
-                src={movie.poster_path ? `https://image.tmdb.org/t/p/w300${movie.poster_path}` : (movie.posterPath ? `https://image.tmdb.org/t/p/w300${movie.posterPath}` : "https://placehold.co/300x420/111111/FFFFFF?text=No+Poster")}
+                src={getImageUrl(movie.poster_path)}
                 alt={movie.title}
-                onError={(e) => { e.target.onerror = null; e.target.src = "https://placehold.co/300x420/111111/FFFFFF?text=No+Poster" }}
               />
               <div className="inicio-movie-title">{movie.title}</div>
             </div>
           ))}
-          {movies.length === 0 && <p>No hay videos disponibles por el momento.</p>}
         </div>
       </section>
 

@@ -7,8 +7,6 @@ const Busqueda = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedCat, setSelectedCat] = useState(null);
 
-  const [searchText, setSearchText] = useState("");
-
   useEffect(() => {
     setIsOpen(true);
     document.body.style.overflow = "hidden";
@@ -24,20 +22,25 @@ const Busqueda = () => {
     }, 200);
   };
 
-  const handleSearch = () => {
-    if (!searchText.trim()) return;
-    setIsOpen(false);
-    navigate(`/resultados?q=${encodeURIComponent(searchText)}`);
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter') handleSearch();
-  };
-
   const handleCategoryClick = (key) => {
     setSelectedCat(key);
     setIsOpen(false);
     navigate(`/tipocontenido?cat=${key}`);
+  };
+
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSearch = () => {
+    if (searchTerm.trim()) {
+      setIsOpen(false);
+      navigate(`/resultados?q=${encodeURIComponent(searchTerm)}`);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
   };
 
   return (
@@ -58,8 +61,8 @@ const Busqueda = () => {
               type="text"
               placeholder="Buscar serie o película..."
               autoFocus
-              value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
               onKeyDown={handleKeyDown}
             />
           </div>

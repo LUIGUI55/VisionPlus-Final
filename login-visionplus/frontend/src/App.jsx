@@ -1,3 +1,4 @@
+import React from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 
 import VisionPlusNeon from "./pages/Landing/VisionPlusNeon.jsx";
@@ -15,7 +16,6 @@ import VisionPlusChangePassword from "./pages/Password/VisionPlusChangePassword.
 import VisionPlusPayment from "./pages/Pago/VisionPlusPayment.jsx";
 import VisionPlusPerfil from "./pages/Perfil/VisionPlusPerfil.jsx";
 import VisionPlusNotifications from "./pages/Notificaciones/VisionPlusNotifications.jsx";
-import AddVideo from "./pages/Admin/AddVideo.jsx";
 
 function App() {
   const navigate = useNavigate();
@@ -41,7 +41,6 @@ function App() {
       <Route path="/tipocontenido" element={<TipoContenido />} />
       <Route path="/perfil" element={<VisionPlusPerfil />} />
       <Route path="/notificaciones" element={<VisionPlusNotifications />} />
-      <Route path="/admin/add-video" element={<AddVideo />} />
 
     </Routes>
   );

@@ -1,38 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./VisionPlusNeon.css";
-import { moviesService } from "../../services/api";
+// import PosterCarousel from "../../components/PosterCarousel"; // Assuming you want me to create this or it exists
+// Since I created it in src/components, the path is correct
+import PosterCarousel from "../../components/PosterCarousel.jsx";
 
 export default function VisionPlusNeon() {
-  const [email, setEmail] = useState("");
-  const [movies, setMovies] = useState([]);
-  const [currentPoster, setCurrentPoster] = useState(0);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    // Cargar películas populares para el carrusel
-    moviesService.getPopularMovies().then(data => {
-      // Filtrar solo las que tengan poster
-      const withPosters = data.filter(m => m.poster_path);
-      setMovies(withPosters.slice(0, 10)); // Tomar 10 para rotar
-    }).catch(err => console.error("Error loading carousel movies:", err));
-  }, []);
-
-  useEffect(() => {
-    if (movies.length === 0) return;
-    const interval = setInterval(() => {
-      setCurrentPoster(prev => (prev + 1) % movies.length);
-    }, 2000); // Rotar cada 2 segundos
-    return () => clearInterval(interval);
-  }, [movies]);
-
-
-  function handleSubmit(e) {
-    e.preventDefault();
-    if (email) {
-      navigate("/register", { state: { email } });
-    }
-  }
 
   function handlePlans() {
     navigate("/planes");
@@ -67,32 +41,22 @@ export default function VisionPlusNeon() {
               Todo el cine, series y documentales en un solo lugar.
             </p>
 
-            <div className="actions-row">
-              <button
-                className="btn btn-ghost"
-                type="button"
-                onClick={handlePlans}
-              >
-                Ver planes
-              </button>
-            </div>
+            <button
+              className="btn btn-primary"
+              type="button"
+              onClick={handlePlans}
+              style={{ fontSize: "1.2rem", padding: "16px 32px" }}
+            >
+              Ver planes
+            </button>
+
+            <p className="note" style={{ marginTop: "16px", color: "#9aa3b2" }}>
+              Planes exclusivos para ti desde $99.
+            </p>
           </section>
 
-          {/* Carrusel de Posters */}
-          <section className="carousel-Column">
-            {movies.length > 0 && (
-              <div className="poster-carousel">
-                {movies.map((movie, index) => (
-                  <img
-                    key={movie.id}
-                    src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                    alt={movie.title}
-                    className={`carousel-img ${index === currentPoster ? "active" : ""}`}
-                  />
-                ))}
-                <div className="carousel-overlay"></div>
-              </div>
-            )}
+          <section className="carousel-container">
+            <PosterCarousel />
           </section>
         </div>
 

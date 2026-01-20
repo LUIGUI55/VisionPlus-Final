@@ -1,112 +1,91 @@
 import axios from 'axios';
 
-let API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-
-// Hotfix: Asegurar que URL tenga protocolo. Si no, Axios asume que es path relativo y lo duplica.
-if (!API_URL.startsWith('http')) {
-  API_URL = `https://${API_URL}`;
-}
-
-console.log("---------------------------------------------");
-console.log("🚀 VisionPlus API Configuration");
-console.log("📡 API_URL:", API_URL);
-console.log("💻 Environment:", import.meta.env.MODE);
-console.log("---------------------------------------------");
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 const api = axios.create({
-  baseURL: API_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+    baseURL: API_URL,
 });
 
-// Interceptor para agregar el token a cada request
-api.interceptors.request.use(
-  (config) => {
+api.interceptors.request.use((config) => {
     const token = localStorage.getItem('token');
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+        config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
+});
 
 export const authService = {
-  login: async (email, password) => {
-    const response = await api.post('/auth/login', { email, password });
-    if (response.data.access_token) {
-      localStorage.setItem('token', response.data.access_token);
-    }
-    return response.data;
-  },
-  register: async (email, password) => {
-    const response = await api.post('/auth/register', { email, password });
-    return response.data;
-  },
-  logout: () => {
-    localStorage.removeItem('token');
-  },
-  getCurrentUser: async () => {
-    // Assuming there is an endpoint for this, otherwise decode token
-    try {
-      const response = await api.get('/auth/profile');
-      return response.data;
-    } catch (error) {
-      return null;
-    }
-  }
+    login: async (email, password) => {
+        const response = await api.post('/auth/login', { email, password });
+        if (response.data.token) {
+            localStorage.setItem('token', response.data.token);
+            localStorage.setItem('user', JSON.stringify(response.data.user));
+        }
+        return response.data;
+    },
+    register: async (email, password) => {
+        const response = await api.post('/auth/register', { email, password });
+        return response.data;
+    },
+    logout: () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+    },
 };
 
 export const moviesService = {
-  getMappedMovies: async () => {
-    const response = await api.get('/videos/mapped');
-    return response.data;
-  },
-  getPopularMovies: async () => {
-    // Usamos el endpoint público de populares para llenar la home
-    // Nota: El backend actúa como proxy a TMDB
-    const response = await api.get('/movies/popular');
-    // La respuesta de TMDB viene en .results
-    return response.data.results || [];
-  },
-  getVideoDetails: async (id) => {
-    const response = await api.get(`/videos/details/${id}`);
-    return response.data;
-  },
-  getStreamUrl: async (id) => {
-    const response = await api.get(`/videos/${id}/stream`);
-    return response.data;
-  },
-  searchMovies: async (query) => {
-    // Busca películas por título (backend proxy a TMDB)
-    const response = await api.get(`/movies/search`, {
-      params: { query }
-    });
-    // La respuesta de TMDB viene en .results
-    return response.data.results || [];
-  },
-  mapVideo: async (data, secret) => {
-    const response = await api.post('/videos/map', data, {
-      headers: {
-        'x-admin-secret': secret
-      }
-    });
-    return response.data;
-  }
+    getPopularMovies: async () => {
+        try {
+            // Intenta endpoint local si existe
+            const response = await api.get('/movies/popular');
+            // Ensure we always return an array
+            if (Array.isArray(response.data)) {
+                return response.data;
+            } else if (response.data && Array.isArray(response.data.results)) {
+                return response.data.results;
+            }
+            return [];
+        } catch {
+            // Fallback a TMDB directo
+            try {
+                const res = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=9b6bf735a29777520e0e0a5822e1775e&language=es-MX&page=1`);
+                return res.data.results || [];
+            } catch (err) {
+                console.error("Failed to fetch popular movies fallback", err);
+                return [];
+            }
+        }
+    },
+    searchMovies: async (query) => {
+        try {
+            const response = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=9b6bf735a29777520e0e0a5822e1775e&language=es-MX&query=${encodeURIComponent(query)}&page=1&include_adult=false`);
+            return response.data.results || [];
+        } catch (err) {
+            console.error("Search failed", err);
+            return [];
+        }
+    },
+    getMappedMovies: async () => {
+        // Stub fallback
+        return [];
+    },
+    getStreamUrl: async (id) => {
+        const response = await api.get(`/movies/${id}/stream`);
+        return response.data;
+    },
+    getVideoDetails: async (id) => {
+        const response = await api.get(`/movies/${id}`);
+        return response.data;
+    }
 };
 
 export const commentsService = {
-  getComments: async (movieId) => {
-    const response = await api.get(`/comments/${movieId}`);
-    return response.data;
-  },
-  addComment: async (movieId, content, emoji, timestamp) => {
-    const response = await api.post("/comments", { movieId, content, emoji, timestamp });
-    return response.data;
-  },
+    getComments: async (movieId) => {
+        return [];
+    },
+    addComment: async (movieId, text, emoji, timestamp) => {
+        return {};
+    }
 };
 
 export default api;

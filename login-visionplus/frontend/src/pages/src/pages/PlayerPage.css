@@ -15,24 +15,13 @@
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.55);
   margin-bottom: 20px;
-  position: relative;
-  /* Needed for emoji overlay */
-}
-
-.player-wrapper {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16/9;
-  background: #000;
-  border-radius: 12px;
-  overflow: hidden;
-  /* Contains emojis and video */
 }
 
 .video-el {
   width: 100%;
-  height: 100%;
-  object-fit: contain;
+  border-radius: 12px;
+  background: #000;
+  aspect-ratio: 16/9;
 }
 
 .inicio-btn {
@@ -46,79 +35,4 @@
 .inicio-btn-primary {
   background-color: var(--i-purple);
   color: white;
-}
-
-/* Emoji Overlay */
-.emoji-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  /* Dejar pasar clicks al video */
-  overflow: hidden;
-  z-index: 10;
-}
-
-.emoji-float {
-  position: absolute;
-  bottom: 20%;
-  font-size: 2.5rem;
-  animation: floatUp 2s ease-out forwards;
-  opacity: 0;
-}
-
-@keyframes floatUp {
-  0% {
-    transform: translateY(0) scale(0.5);
-    opacity: 0;
-  }
-
-  10% {
-    opacity: 1;
-    transform: translateY(-10px) scale(1.2);
-  }
-
-  100% {
-    transform: translateY(-150px) scale(1);
-    opacity: 0;
-  }
-}
-
-.reaction-bar {
-  margin-top: 10px;
-  background: var(--i-panel2);
-  padding: 10px;
-  border-radius: 8px;
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  justify-content: center;
-}
-
-.reaction-bar span {
-  font-size: 0.9rem;
-  opacity: 0.8;
-  margin-right: 10px;
-}
-
-.reaction-bar button {
-  background: transparent;
-  border: 2px solid var(--i-purple);
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  font-size: 1.2rem;
-  cursor: pointer;
-  transition: transform 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-}
-
-.reaction-bar button:hover {
-  transform: scale(1.1);
-  background: rgba(157, 78, 221, 0.2);
 }
