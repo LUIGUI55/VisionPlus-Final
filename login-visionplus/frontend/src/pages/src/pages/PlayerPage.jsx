@@ -69,6 +69,13 @@ export default function PlayerPage() {
     };
   }, [storageKey, videoData]);
 
+  // Navigation Functions
+  function goToInicio() { navigate("/inicio"); }
+  function goToMiLista() { navigate("/milista"); }
+  function goToBusqueda() { navigate("/busqueda"); }
+  function goToPerfil() { navigate("/perfil"); }
+  function goToNotifications() { navigate("/notificaciones"); }
+
   // --- Logic for Time-Synced Comments ---
   const [comments, setComments] = useState([]);
   const [activeEmojis, setActiveEmojis] = useState([]);
