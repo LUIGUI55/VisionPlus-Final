@@ -1,12 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./VisionPlusNeon.css";
-// import PosterCarousel from "../../components/PosterCarousel"; // Assuming you want me to create this or it exists
-// Since I created it in src/components, the path is correct
-import PosterCarousel from "../../components/PosterCarousel.jsx";
 
 export default function VisionPlusNeon() {
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState("");
+
   const navigate = useNavigate();
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    setTimeout(() => {
+        navigate("/inicio"); 
+    }, 1500); 
+
+  }
 
   function handlePlans() {
     navigate("/planes");
@@ -41,22 +49,49 @@ export default function VisionPlusNeon() {
               Todo el cine, series y documentales en un solo lugar.
             </p>
 
-            <button
-              className="btn btn-primary"
-              type="button"
-              onClick={handlePlans}
-              style={{ fontSize: "1.2rem", padding: "16px 32px" }}
+            <form
+              className="form"
+              onSubmit={handleSubmit}
+              aria-label="Registro de correo"
             >
-              Ver planes
-            </button>
+              <label htmlFor="email">
+                Correo electrónico
+              </label>
+              
+              <div className="input-row">
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  className="input"
+                  placeholder="Ingresa tu correo electrónico"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  autoComplete="email"
+                />
 
-            <p className="note" style={{ marginTop: "16px", color: "#9aa3b2" }}>
-              Planes exclusivos para ti desde $99.
-            </p>
-          </section>
+                <button className="btn btn-primary" type="submit">
+                  Empezar ahora
+                </button>
+              </div>
 
-          <section className="carousel-container">
-            <PosterCarousel />
+              <button
+                className="btn btn-ghost"
+                type="button"
+                onClick={handlePlans}
+              >
+                Ver planes
+              </button>
+              
+              <p className="note">Planes exclusivos para ti desde $99.</p>
+
+              {status && (
+                <p role="status" aria-live="polite" className="status">
+                  {status}
+                </p>
+              )}
+            </form>
           </section>
         </div>
 

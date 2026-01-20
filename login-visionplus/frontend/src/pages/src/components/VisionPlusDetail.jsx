@@ -1,8 +1,29 @@
-import { useNavigate } from "react-router-dom";
-import "./VisionPlusDetail.css";
+import { useParams } from "react-router-dom";
+import { moviesService } from "../../../services/api.js";
+import { useEffect, useState } from "react";
 
 export default function VisionPlusDetail() {
   const navigate = useNavigate();
+  const { id } = useParams();
+  const [movie, setMovie] = useState(null);
+
+  useEffect(() => {
+    async function fetchDetail() {
+      try {
+        // Support both API ID and legacy string IDs fallback if needed
+        if (id === 'strangerthings') {
+          // allow fallback static or redirect
+        }
+        const data = await moviesService.getVideoDetails(id);
+        setMovie(data);
+      } catch (e) {
+        console.error("Failed to load movie detail", e);
+      }
+    }
+    fetchDetail();
+  }, [id]);
+
+  if (!movie) return <div style={{ color: 'white', padding: '20px' }}>Cargando...</div>;
 
   return (
     <>
@@ -42,7 +63,7 @@ export default function VisionPlusDetail() {
           { }
           <aside className="left">
             <figure className="poster">
-              <img src="" alt="Poster" />
+              <img src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : "https://placehold.co/300x450"} alt={movie.title} />
             </figure>
             <div className="actions">
               <button className="act-btn">➕ Agregar a… <small>Mi lista</small></button>
@@ -52,17 +73,15 @@ export default function VisionPlusDetail() {
 
           <section>
             <header className="panel detail-hero">
-              <div className="bg" style={{ backgroundImage: "url('')" }}></div>
+              <div className="bg" style={{ backgroundImage: movie.backdrop_path ? `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})` : "" }}></div>
               <div className="title">
-                <h1>Prueba</h1><span className="year">(2025)</span>
+                <h1>{movie.title}</h1><span className="year">({new Date(movie.release_date).getFullYear() || "2025"})</span>
               </div>
               <div className="meta-row">
-                <span className="rating"><span className="dot"></span> 56% • 98 min • HD</span>
-                <span className="pill">Terror</span>
-                <span className="pill">Suspense</span>
-                <span className="pill">EN / LAT</span>
+                <span className="rating"><span className="dot"></span> {movie.vote_average ?? "0"} • HD</span>
+                <span className="pill">Película</span>
               </div>
-              <p className="syn">Descripcion</p>
+              <p className="syn">{movie.overview}</p>
             </header>
 
             <div className="bar">
@@ -72,14 +91,14 @@ export default function VisionPlusDetail() {
               </div>
             </div>
 
-            <div className="player" onClick={() => navigate("/ver/strangers2")}>
+            <div className="player" onClick={() => navigate(`/ver/${id}`)}>
               <div className="ph"></div>
             </div>
 
             <section className="features">
             </section>
 
-           
+
           </section>
 
           { }
@@ -88,7 +107,7 @@ export default function VisionPlusDetail() {
               <div className="tabs">
                 <button className="tab active">Actualizado</button>
                 <button className="tab">Últimas</button>
-              </div>  
+              </div>
             </div>
           </aside>
         </div>

@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { authService } from "../../services/api";
 import "./VisionPlusLogin.css";
 
 export default function VisionPlusLogin({ backgroundUrl = "fondo.jpg" }) {
@@ -11,12 +12,19 @@ export default function VisionPlusLogin({ backgroundUrl = "fondo.jpg" }) {
     navigate("/inicio");
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = Object.fromEntries(new FormData(e.target));
-    console.log("Datos:", data);
+    const formData = new FormData(e.target);
+    const email = formData.get("email");
+    const password = formData.get("password");
 
-    goDetail(e);
+    try {
+      await authService.login(email, password);
+      navigate("/inicio");
+    } catch (error) {
+      console.error("Login failed", error);
+      alert("Error al iniciar sesión. Verifica tus credenciales.");
+    }
   };
 
   function goRegister(e) {

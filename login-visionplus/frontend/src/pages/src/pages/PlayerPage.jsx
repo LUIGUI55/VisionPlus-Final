@@ -10,7 +10,6 @@ export default function PlayerPage() {
   const videoRef = useRef(null);
   const storageKey = `vp-progress:${id}`;
 
-  // 1. Fetch Video Data
   useEffect(() => {
     async function loadVideo() {
       try {
@@ -24,7 +23,6 @@ export default function PlayerPage() {
         });
       } catch (error) {
         console.error("Error loading video:", error);
-        // Fallback demo
         setVideoData({
           title: "Error / Demo Mode",
           poster: "",
@@ -35,7 +33,6 @@ export default function PlayerPage() {
     loadVideo();
   }, [id]);
 
-  // 2. Restore playback position
   useEffect(() => {
     if (!videoData) return;
     const v = videoRef.current;
@@ -49,7 +46,6 @@ export default function PlayerPage() {
     return () => v.removeEventListener("loadedmetadata", onLoaded);
   }, [videoData, storageKey]);
 
-  // 3. Save playback position
   useEffect(() => {
     if (!videoData) return;
     const v = videoRef.current;
@@ -65,32 +61,26 @@ export default function PlayerPage() {
     };
   }, [videoData, storageKey]);
 
-  // Navigation
   function goToInicio() { navigate("/inicio"); }
   function goToMiLista() { navigate("/milista"); }
   function goToBusqueda() { navigate("/busqueda"); }
   function goToPerfil() { navigate("/perfil"); }
   function goToNotifications() { navigate("/notificaciones"); }
 
-  if (!videoData) {
-    return <div style={{ color: "white", padding: "2rem", textAlign: "center" }}>Cargando video...</div>;
-  }
+  if (!videoData) return <div style={{ color: 'white' }}>Cargando...</div>;
 
   return (
     <div className="inicio-page">
       <header className="inicio-navbar">
         <div className="inicio-logo brand">VISIONPLUS</div>
-
         <nav className="inicio-nav">
           <a onClick={goToInicio}>Inicio</a>
           <a onClick={goToMiLista}>Mi lista</a>
         </nav>
-
         <div className="inicio-search-box" onClick={goToBusqueda}>
           <input type="text" placeholder="Buscar..." readOnly />
           <button>🔍</button>
         </div>
-
         <div className="inicio-user">
           <div onClick={goToPerfil}>Perfil</div>
           <div onClick={goToNotifications}>Notificaciones</div>

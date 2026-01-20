@@ -1,8 +1,10 @@
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { moviesService } from "../../services/api.js";
 
 export default function Inicio() {
   const navigate = useNavigate();
-  const [movies, setMovies] = React.useState([]);
+  const [currentSlide, setCurrentSlide] = React.useState(0);
 
   React.useEffect(() => {
     async function fetchMovies() {
@@ -15,6 +17,15 @@ export default function Inicio() {
     }
     fetchMovies();
   }, []);
+
+  // Carousel auto-slide
+  React.useEffect(() => {
+    if (movies.length === 0) return;
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % Math.min(movies.length, 5));
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [movies]);
 
   function goToPlayer(movie) {
     if (movie && movie.id) {
@@ -31,7 +42,21 @@ export default function Inicio() {
       navigate("/detail/strangerthings");
     }
   }
-  // ... keep existing navigation functions ...
+  function goToMiLista() {
+    navigate("/milista");
+  }
+
+  function goToBusqueda() {
+    navigate("/buscar");
+  }
+
+  function goToPerfil() {
+    navigate("/perfil");
+  }
+
+  function goToNotifications() {
+    navigate("/notificaciones");
+  }
 
   // Helper to get image URL
   const getImageUrl = (path) => {
@@ -79,7 +104,7 @@ export default function Inicio() {
         <div className="inicio-hero-content">
           <h1>{movies.length > 0 ? movies[0].title : "Prueba"}</h1>
           <p>
-            {movies.length > 0 ? movies[0].overview : "Descripcion"}
+            {movies.length > 0 ? (movies[0].overview?.slice(0, 150) + "...") : "Descripcion"}
           </p>
 
           <div className="inicio-buttons">
@@ -96,6 +121,26 @@ export default function Inicio() {
             >
               Más info
             </button>
+          </div>
+        </div>
+
+        {/* Carousel Section */}
+        <div className="inicio-hero-carousel">
+          <div className="carousel-track">
+            {movies.slice(0, 5).map((movie, index) => (
+              <div
+                key={movie.id}
+                className={`carousel-slide ${index === currentSlide ? "active" : ""}`}
+                style={{
+                  transform: index === currentSlide ? 'scale(1.1) translateX(0)' : 'scale(0.9) translateX(20px)',
+                  opacity: index === currentSlide ? 1 : 0.6,
+                  zIndex: index === currentSlide ? 10 : 1
+                }}
+                onClick={() => goToDetail(movie)}
+              >
+                <img src={getImageUrl(movie.poster_path)} alt={movie.title} />
+              </div>
+            ))}
           </div>
         </div>
       </section>

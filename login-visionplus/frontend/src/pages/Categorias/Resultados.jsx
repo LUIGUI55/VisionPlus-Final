@@ -1,4 +1,6 @@
-import { moviesService } from "../../services/api.js";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import "./Resultados.css";
 
 const Resultados = () => {
   const navigate = useNavigate();
@@ -7,27 +9,16 @@ const Resultados = () => {
 
   useEffect(() => {
     setIsOpen(true);
-
-    const searchParams = new URLSearchParams(window.location.search);
-    const query = searchParams.get("q");
-
-    if (query) {
-      async function fetchResults() {
-        const results = await moviesService.searchMovies(query);
-        // Map TMDB results to local format if needed, or use directly if adaptable
-        // Assuming TMDB returns { title, poster_path, id }
-        const mapped = results.map(m => ({
-          titulo: m.title,
-          img: m.poster_path ? `https://image.tmdb.org/t/p/w500${m.poster_path}` : "https://placehold.co/300x450/333/FFF?text=No+Image",
-          id: m.id
-        }));
-        setPeliculas(mapped);
-      }
-      fetchResults();
-    } else {
-      // Fallback or empty
-      setPeliculas([]);
-    }
+    const ejemploPeliculas = [
+      { titulo: "Película A", img: "https://placehold.co/300x450/9d4edd/FFFFFF?text=A", id: "a" },
+      { titulo: "Película B", img: "https://placehold.co/300x450/9d4edd/FFFFFF?text=B", id: "b" },
+      { titulo: "Película C", img: "https://placehold.co/300x450/9d4edd/FFFFFF?text=C", id: "c" },
+      { titulo: "Película D", img: "https://placehold.co/300x450/9d4edd/FFFFFF?text=D", id: "d" },
+      { titulo: "Película E", img: "https://placehold.co/300x450/9d4edd/FFFFFF?text=E", id: "e" },
+      { titulo: "Película F", img: "https://placehold.co/300x450/9d4edd/FFFFFF?text=E", id: "f" },
+      
+    ];
+    setPeliculas(ejemploPeliculas);
 
     document.body.style.overflow = "hidden";
     return () => {

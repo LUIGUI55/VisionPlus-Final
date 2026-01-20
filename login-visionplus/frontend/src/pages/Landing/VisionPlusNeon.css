@@ -145,21 +145,12 @@ body {
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr;
-  gap: 48px;
+  gap: 32px;
   padding: 32px 0;
-  align-items: center;
-}
-
-@media (min-width: 900px) {
-  .hero-inner {
-    grid-template-columns: 1fr 1fr;
-    min-height: calc(100vh - 64px);
-  }
 }
 
 .copy {
   max-width: 600px;
-  text-align: left;
 }
 
 h1 {
@@ -340,26 +331,4 @@ h1 .hl {
     flex-grow: 1; 
     flex-basis: auto; 
   }
-  .carousel-container {
-    max-width: 300px;
-    margin: 32px auto 0;
-  }
-}
-
-.carousel-container {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 2/3;
-  max-width: 400px;
-  margin: 0 auto;
-  perspective: 1000px;
-}
-
-.poster-carousel {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 0 30px rgba(141, 86, 185, 0.4);
 }

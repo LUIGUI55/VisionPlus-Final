@@ -28,21 +28,6 @@ const Busqueda = () => {
     navigate(`/tipocontenido?cat=${key}`);
   };
 
-  const [searchTerm, setSearchTerm] = useState("");
-
-  const handleSearch = () => {
-    if (searchTerm.trim()) {
-      setIsOpen(false);
-      navigate(`/resultados?q=${encodeURIComponent(searchTerm)}`);
-    }
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      handleSearch();
-    }
-  };
-
   return (
     <div className={`busqueda-container ${isOpen ? "active" : ""}`}>
       <div className="busqueda-overlay" onClick={closeSearch}></div>
@@ -57,16 +42,9 @@ const Busqueda = () => {
 
         <div className="busqueda-row">
           <div className="busqueda-input-wrapper">
-            <input
-              type="text"
-              placeholder="Buscar serie o película..."
-              autoFocus
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              onKeyDown={handleKeyDown}
-            />
+            <input type="text" placeholder="Buscar serie o película..." autoFocus />
           </div>
-          <button className="busqueda-btn-lupa" onClick={handleSearch}>🔍</button>
+          <button className="busqueda-btn-lupa">🔍</button>
         </div>
 
         <div className="busqueda-cat-grid">
