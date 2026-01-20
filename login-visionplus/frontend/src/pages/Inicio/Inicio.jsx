@@ -10,15 +10,27 @@ export default function Inicio() {
   React.useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const data = await moviesService.getMappedMovies();
-        if (Array.isArray(data)) {
-          setMovies(data);
+        // Intentar obtener películas populares de TMDB
+        const popularData = await moviesService.getPopularMovies();
+
+        if (Array.isArray(popularData) && popularData.length > 0) {
+          // Mapear datos de TMDB al formato que espera nuestro UI si es necesario
+          // (En este caso, TMDB devuelve title, poster_path, id, etc. que es compatible)
+          // Aseguramos que tengan tmdbId (que es el id en TMDB)
+          const formatted = popularData.map(m => ({
+            ...m,
+            tmdbId: m.id // TMDB usa 'id', nuestro sistema mapeado usa 'tmdbId'
+          }));
+          setMovies(formatted);
         } else {
-          console.warn("API did not return an array:", data);
-          setMovies([]);
+          // Fallback a videos mapeados si popular falla o está vacío
+          console.log("No popular movies found, trying mapped videos...");
+          const mappedData = await moviesService.getMappedMovies();
+          if (Array.isArray(mappedData)) setMovies(mappedData);
         }
       } catch (error) {
         console.error("Error fetching movies:", error);
+        // Fallback final silencioso
       }
     };
     fetchMovies();
@@ -117,7 +129,7 @@ export default function Inicio() {
           {Array.isArray(movies) && movies.map((movie) => (
             <div className="inicio-movie" key={movie._id} onClick={() => goToDetail(movie.tmdbId)} style={{ cursor: 'pointer' }}>
               <img
-                src={movie.posterPath ? `https://image.tmdb.org/t/p/w300${movie.posterPath}` : "https://placehold.co/300x420/111111/FFFFFF?text=No+Poster"}
+                src={movie.poster_path ? `https://image.tmdb.org/t/p/w300${movie.poster_path}` : (movie.posterPath ? `https://image.tmdb.org/t/p/w300${movie.posterPath}` : "https://placehold.co/300x420/111111/FFFFFF?text=No+Poster")}
                 alt={movie.title}
                 onError={(e) => { e.target.onerror = null; e.target.src = "https://placehold.co/300x420/111111/FFFFFF?text=No+Poster" }}
               />

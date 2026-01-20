@@ -2,6 +2,12 @@ import axios from 'axios';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
+console.log("---------------------------------------------");
+console.log("🚀 VisionPlus API Configuration");
+console.log("📡 API_URL:", API_URL);
+console.log("💻 Environment:", import.meta.env.MODE);
+console.log("---------------------------------------------");
+
 const api = axios.create({
   baseURL: API_URL,
   headers: {
@@ -53,6 +59,13 @@ export const moviesService = {
   getMappedMovies: async () => {
     const response = await api.get('/videos/mapped');
     return response.data;
+  },
+  getPopularMovies: async () => {
+    // Usamos el endpoint público de populares para llenar la home
+    // Nota: El backend actúa como proxy a TMDB
+    const response = await api.get('/movies/popular');
+    // La respuesta de TMDB viene en .results
+    return response.data.results || [];
   },
   getVideoDetails: async (id) => {
     const response = await api.get(`/videos/details/${id}`);
