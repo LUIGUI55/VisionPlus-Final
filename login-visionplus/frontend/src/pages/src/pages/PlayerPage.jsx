@@ -170,36 +170,38 @@ export default function PlayerPage() {
       <main className="watch-main">
         <h1 className="watch-title">{videoData.title}</h1>
         <div className="watch__panel">
-          {videoData.type === 'bunny' ? (
-            <iframe
-              src={`https://iframe.mediadelivery.net/embed/${videoData.libraryId}/${videoData.videoId}?autoplay=true`}
-              loading="lazy"
-              style={{ border: 0, width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}
-              allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
-              allowFullScreen={true}
-            ></iframe>
-          ) : (
-            <video
-              ref={videoRef}
-              className="video-el"
-              controls
-              preload="metadata"
-              // poster={data.poster}
-              playsInline
-              autoPlay
-            >
-              <source src={videoData.url} type={videoData.type === 'hls' ? 'application/x-mpegURL' : 'video/mp4'} />
-              Tu navegador no soporta video HTML5.
-            </video>
-          )}
+          <div className="player-wrapper">
+            {videoData.type === 'bunny' ? (
+              <iframe
+                src={`https://iframe.mediadelivery.net/embed/${videoData.libraryId}/${videoData.videoId}?autoplay=true`}
+                loading="lazy"
+                style={{ border: 0, width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}
+                allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+                allowFullScreen={true}
+              ></iframe>
+            ) : (
+              <video
+                ref={videoRef}
+                className="video-el"
+                controls
+                preload="metadata"
+                // poster={data.poster}
+                playsInline
+                autoPlay
+              >
+                <source src={videoData.url} type={videoData.type === 'hls' ? 'application/x-mpegURL' : 'video/mp4'} />
+                Tu navegador no soporta video HTML5.
+              </video>
+            )}
 
-          {/* Emoji Overlay */}
-          <div className="emoji-overlay">
-            {activeEmojis.map(c => (
-              <div key={c._id} className="emoji-float" style={{ left: `${Math.random() * 80 + 10}%` }}>
-                {c.emoji}
-              </div>
-            ))}
+            {/* Emoji Overlay */}
+            <div className="emoji-overlay">
+              {activeEmojis.map(c => (
+                <div key={c._id} className="emoji-float" style={{ left: `${Math.random() * 80 + 10}%` }}>
+                  {c.emoji}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 

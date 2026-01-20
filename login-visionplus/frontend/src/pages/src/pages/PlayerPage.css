@@ -19,11 +19,20 @@
   /* Needed for emoji overlay */
 }
 
+.player-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: #000;
+  border-radius: 12px;
+  overflow: hidden;
+  /* Contains emojis and video */
+}
+
 .video-el {
   width: 100%;
-  border-radius: 12px;
-  background: #000;
-  aspect-ratio: 16/9;
+  height: 100%;
+  object-fit: contain;
 }
 
 .inicio-btn {
