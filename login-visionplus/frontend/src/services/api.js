@@ -1,6 +1,11 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+let API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
+// Hotfix: Asegurar que URL tenga protocolo. Si no, Axios asume que es path relativo y lo duplica.
+if (!API_URL.startsWith('http')) {
+  API_URL = `https://${API_URL}`;
+}
 
 console.log("---------------------------------------------");
 console.log("🚀 VisionPlus API Configuration");
