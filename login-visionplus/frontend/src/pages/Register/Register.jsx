@@ -1,5 +1,4 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./Register.css";
 import { authService } from "../../services/api";
 
@@ -7,6 +6,8 @@ export default function Register() {
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const defaultEmail = location.state?.email || "";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -47,7 +48,13 @@ export default function Register() {
           <h1>Crear cuenta</h1>
 
           <form onSubmit={handleSubmit}>
-            <input type="text" name="email" placeholder="Correo electrónico o usuario" required />
+            <input
+              type="text"
+              name="email"
+              placeholder="Correo electrónico o usuario"
+              required
+              defaultValue={defaultEmail}
+            />
 
             <div className="password-wrapper">
               <input

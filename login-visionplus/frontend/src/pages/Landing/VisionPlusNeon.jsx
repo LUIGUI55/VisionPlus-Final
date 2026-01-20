@@ -10,10 +10,9 @@ export default function VisionPlusNeon() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    setTimeout(() => {
-        navigate("/inicio"); 
-    }, 1500); 
-
+    if (email) {
+      navigate("/register", { state: { email } });
+    }
   }
 
   function handlePlans() {
@@ -57,7 +56,7 @@ export default function VisionPlusNeon() {
               <label htmlFor="email">
                 Correo electrónico
               </label>
-              
+
               <div className="input-row">
                 <input
                   id="email"
@@ -83,7 +82,7 @@ export default function VisionPlusNeon() {
               >
                 Ver planes
               </button>
-              
+
               <p className="note">Planes exclusivos para ti desde $99.</p>
 
               {status && (
