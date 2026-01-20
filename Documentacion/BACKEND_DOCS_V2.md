@@ -60,7 +60,20 @@ VisionPlus permite tener múltiples perfiles por cuenta (como "Papá", "Niños",
 - **Por qué**: No tenía sentido crear una base de datos propia con miles de películas. Mejor consumo una API externa para obtener títulos, sinopsis e imágenes de alta calidad (posters/backdrops).
 - **Cache (Pendiente)**: A futuro me gustaría agregar caché aquí para no hacer tantas peticiones externas.
 
-### 5. Infraestructura y Balanceo de Carga (Nuevo)
+### 5. Módulo de Comentarios (`/comments`)
+
+Este módulo fue añadido para fomentar la interacción social tipo "SoundCloud" en los videos.
+
+- **Concepto**: Permitir reacciones (emojis) sincronizadas con el segundo exacto del video.
+- **Flujo**:
+  - El usuario envía una reacción mientras ve el video (ej. en el minuto 2:05).
+  - El backend guarda esa reacción junto con el `timestamp` (125 segundos).
+  - Al reproducir, el frontend pide todas las reacciones y las muestra flotando cuando el video llega a ese segundo.
+- **Endpoints**:
+  - `POST /comments`: Guarda una nueva reacción.
+  - `GET /comments/:movieId`: Devuelve toda la lista de reacciones para pre-cargarlas en el player.
+
+### 6. Infraestructura y Balanceo de Carga (Nuevo)
 
 Esta fue una de las partes más complejas y recientes.
 

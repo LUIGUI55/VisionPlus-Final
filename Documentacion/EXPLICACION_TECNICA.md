@@ -75,3 +75,22 @@ Railway es una "Platform as a Service" que abstrae la complejidad de administrar
 ### Gestión de Variables de Entorno
 
 - En lugar de archivos `.env`, las variables (como `MONGO_URI`, `JWT_SECRET`) se inyectan dinámicamente en el entorno de ejecución del contenedor desde el dashboard de Railway, garantizando la seguridad de las credenciales.
+
+---
+
+## 4. Innovaciones en Frontend (UX/UI)
+
+### Responsividad Avanzada
+
+Se implementó un diseño "Mobile-First" real para asegurar que la plataforma funcione en cualquier dispositivo.
+
+- **Grid Layout Inteligente**: En lugar de `flexbox` simple, utilizamos `CSS Grid` con `minmax()` para que los posters de las películas se reacomoden automáticamente (2 columnas en móvil, 6+ en desktop) sin romper el diseño.
+- **Navegación Adaptativa**: En móviles, el menú se transforma para ser accesible táctilmente sin ocultar elementos importantes.
+
+### Reproductor Interactivo (Time-Synced)
+
+Inspirado en plataformas como SoundCloud, el reproductor de video no es estático:
+
+- **Sincronización de Eventos**: Utilizamos `useEffect` en React conectado al evento `timeupdate` del elemento `<video>`.
+- **Lógica**: Cada vez que el video avanza, el código verifica si hay reacciones (emojis) guardadas para ese segundo exacto.
+- **Overlay**: Si hay coincidencia, se renderiza un componente "flotante" sobre el video en tiempo real, creando una experiencia comunitaria.

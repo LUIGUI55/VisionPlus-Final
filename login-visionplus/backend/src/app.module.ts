@@ -15,6 +15,7 @@ import { VideosModule } from './videos/videos.module';
 import { HistoryModule } from './history/history.module';
 
 import { SubscriptionsModule } from './subscriptions/subscriptions.module';
+import { CommentsModule } from './comments/comments.module';
 
 
 @Module({
@@ -40,6 +41,7 @@ import { SubscriptionsModule } from './subscriptions/subscriptions.module';
         VideosModule, // modulo de videos
         HistoryModule, // modulo de historial
         SubscriptionsModule, // modulo de suscripciones y pagos
+        CommentsModule, // modulo de comentarios y reacciones
         ServeStaticModule.forRoot({
             rootPath: join(__dirname, '..', 'uploads'),
             serveRoot: '/uploads',

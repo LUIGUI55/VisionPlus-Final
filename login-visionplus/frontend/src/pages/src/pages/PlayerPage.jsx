@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useRef } from "react";
-import { moviesService } from "../../../services/api";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { moviesService, commentsService } from "../../../services/api";
 import { useParams, useNavigate } from "react-router-dom";
 import "./PlayerPage.css";
 
@@ -63,13 +63,79 @@ export default function PlayerPage() {
       v.removeEventListener("timeupdate", onTime);
       v.removeEventListener("ended", onEnded);
     };
+    return () => {
+      v.removeEventListener("timeupdate", onTime);
+      v.removeEventListener("ended", onEnded);
+    };
   }, [storageKey, videoData]);
 
-  function goToInicio() { navigate("/inicio"); }
-  function goToMiLista() { navigate("/milista"); }
-  function goToBusqueda() { navigate("/busqueda"); }
-  function goToPerfil() { navigate("/perfil"); }
-  function goToNotifications() { navigate("/notificaciones"); }
+  // --- Logic for Time-Synced Comments ---
+  const [comments, setComments] = useState([]);
+  const [activeEmojis, setActiveEmojis] = useState([]);
+
+  // 1. Cargar comentarios al iniciar
+  useEffect(() => {
+    if (!id) return;
+    commentsService.getComments(id).then(data => {
+      setComments(data);
+    }).catch(err => console.error("Error loading comments:", err));
+  }, [id]);
+
+  // 2. Sincronizar emojis con el tiempo del video
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+
+    const onTimeUpdate = () => {
+      const currentTime = Math.floor(v.currentTime);
+      // Filtrar comentarios que coincidan con este segundo exacto
+      // y que no estén ya mostrados (para evitar spam visual si el update es muy rápido)
+      const matches = comments.filter(c => Math.floor(c.timestamp) === currentTime);
+
+      if (matches.length > 0) {
+        // Mostrar emojis por 2 segundos
+        setActiveEmojis(prev => {
+          // Evitar duplicados simples si ya están
+          const newIds = new Set(matches.map(m => m._id));
+          const currentIds = new Set(prev.map(p => p._id));
+          // Solo agregar si no están en pantalla
+          const toAdd = matches.filter(m => !currentIds.has(m._id));
+
+          if (toAdd.length === 0) return prev;
+          return [...prev, ...toAdd];
+        });
+
+        // Limpiarlos después de 2s
+        setTimeout(() => {
+          setActiveEmojis(prev => prev.filter(p => !matches.includes(p)));
+        }, 2000);
+      }
+    };
+
+    v.addEventListener("timeupdate", onTimeUpdate);
+    return () => v.removeEventListener("timeupdate", onTimeUpdate);
+  }, [comments]);
+
+  // 3. Enviar Reacción
+  const sendReaction = async (emoji) => {
+    const v = videoRef.current;
+    const currentTime = v ? v.currentTime : 0;
+
+    // Optimistic Update: Mostrarlo inmediatamente
+    const tempId = Date.now();
+    const tempComment = { _id: tempId, emoji, timestamp: currentTime };
+    setActiveEmojis(prev => [...prev, tempComment]);
+    setTimeout(() => setActiveEmojis(prev => prev.filter(p => p._id !== tempId)), 2000);
+
+    try {
+      await commentsService.addComment(id, "", emoji, currentTime);
+      // Recargar comentarios (opcional, o solo agregarlo al state local)
+      setComments(prev => [...prev, { ...tempComment, _id: "server-" + tempId }]);
+      console.log("Reacción enviada!");
+    } catch (error) {
+      console.error("Error enviando reacción:", error);
+    }
+  };
 
   if (!videoData) return <div className="watch-main">Cargando player...</div>;
 
@@ -119,7 +185,27 @@ export default function PlayerPage() {
               Tu navegador no soporta video HTML5.
             </video>
           )}
+
+          {/* Emoji Overlay */}
+          <div className="emoji-overlay">
+            {activeEmojis.map(c => (
+              <div key={c._id} className="emoji-float" style={{ left: `${Math.random() * 80 + 10}%` }}>
+                {c.emoji}
+              </div>
+            ))}
+          </div>
         </div>
+
+        {/* Reaction Bar */}
+        <div className="reaction-bar">
+          <span>Reacciona en este momento:</span>
+          <button onClick={() => sendReaction("🔥")}>🔥</button>
+          <button onClick={() => sendReaction("❤️")}>❤️</button>
+          <button onClick={() => sendReaction("😂")}>😂</button>
+          <button onClick={() => sendReaction("😮")}>😮</button>
+          <button onClick={() => sendReaction("😢")}>😢</button>
+        </div>
+
         <button className="inicio-btn inicio-btn-primary" onClick={goToInicio}>
           Regresar
         </button>

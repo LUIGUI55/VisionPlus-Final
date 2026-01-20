@@ -98,4 +98,15 @@ export const moviesService = {
   }
 };
 
+export const commentsService = {
+  getComments: async (movieId) => {
+    const response = await api.get(`/comments/${movieId}`);
+    return response.data;
+  },
+  addComment: async (movieId, content, emoji, timestamp) => {
+    const response = await api.post("/comments", { movieId, content, emoji, timestamp });
+    return response.data;
+  },
+};
+
 export default api;

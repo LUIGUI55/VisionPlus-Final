@@ -68,6 +68,18 @@ Cuando entras a ver "Titanic":
 
 Esto nos permite tener una interfaz con millones de películas (vía API TMDB) pero solo pagar almacenamiento por las que realmente hemos subido.
 
+### 4. Colección: `comments` (Interacciones)
+
+Guarda las reacciones de los usuarios en momentos específicos del video.
+
+| Campo | Tipo | Requerido | Descripción |
+| :--- | :--- | :--- | :--- |
+| `userId` | ObjectId | **Sí** | Quién reaccionó. |
+| `movieId` | String | **Sí** | ID de la película/video. |
+| `emoji` | String | No | El ícono de reacción (ej. '🔥', '❤️'). |
+| `content` | String | No | Texto opcional (si se expande a chat). |
+| `timestamp` | Number | **Sí** | El segundo exacto (ej. `124`) donde debe aparecer. |
+
 ---
 
 ## Diagrama Mental de Relaciones
