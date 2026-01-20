@@ -1,30 +1,45 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import "./Resultados.css";
+import { moviesService } from "../../services/api";
 
 const Resultados = () => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [peliculas, setPeliculas] = useState([]);
 
+  const [searchParams] = useSearchParams(); // Requires import
+  const query = searchParams.get("q");
+
   useEffect(() => {
     setIsOpen(true);
-    const ejemploPeliculas = [
-      { titulo: "Película A", img: "https://placehold.co/300x450/9d4edd/FFFFFF?text=A", id: "a" },
-      { titulo: "Película B", img: "https://placehold.co/300x450/9d4edd/FFFFFF?text=B", id: "b" },
-      { titulo: "Película C", img: "https://placehold.co/300x450/9d4edd/FFFFFF?text=C", id: "c" },
-      { titulo: "Película D", img: "https://placehold.co/300x450/9d4edd/FFFFFF?text=D", id: "d" },
-      { titulo: "Película E", img: "https://placehold.co/300x450/9d4edd/FFFFFF?text=E", id: "e" },
-      { titulo: "Película F", img: "https://placehold.co/300x450/9d4edd/FFFFFF?text=E", id: "f" },
-      
-    ];
-    setPeliculas(ejemploPeliculas);
+
+    if (query) {
+      const fetchResults = async () => {
+        try {
+          const results = await moviesService.searchMovies(query);
+          // Mapeamos los resultados de TMDB para que tengan 'img' y 'titulo'
+          const formatted = results.map(p => ({
+            titulo: p.title || p.name, // TMDB usa 'title' para pelis, 'name' para series
+            img: p.poster_path
+              ? `https://image.tmdb.org/t/p/w300${p.poster_path}`
+              : "https://placehold.co/300x450/111111/FFFFFF?text=No+Poster",
+            id: p.id // ID de TMDB
+          }));
+          setPeliculas(formatted);
+        } catch (error) {
+          console.error("Error searching:", error);
+          setPeliculas([]);
+        }
+      };
+      fetchResults();
+    }
 
     document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = "unset";
     };
-  }, []);
+  }, [query]);
 
   const closeResultados = () => {
     setIsOpen(false);

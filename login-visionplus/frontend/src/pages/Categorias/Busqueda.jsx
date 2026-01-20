@@ -7,6 +7,8 @@ const Busqueda = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedCat, setSelectedCat] = useState(null);
 
+  const [searchText, setSearchText] = useState("");
+
   useEffect(() => {
     setIsOpen(true);
     document.body.style.overflow = "hidden";
@@ -20,6 +22,16 @@ const Busqueda = () => {
     setTimeout(() => {
       navigate(-1);
     }, 200);
+  };
+
+  const handleSearch = () => {
+    if (!searchText.trim()) return;
+    setIsOpen(false);
+    navigate(`/resultados?q=${encodeURIComponent(searchText)}`);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') handleSearch();
   };
 
   const handleCategoryClick = (key) => {
@@ -42,9 +54,16 @@ const Busqueda = () => {
 
         <div className="busqueda-row">
           <div className="busqueda-input-wrapper">
-            <input type="text" placeholder="Buscar serie o película..." autoFocus />
+            <input
+              type="text"
+              placeholder="Buscar serie o película..."
+              autoFocus
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              onKeyDown={handleKeyDown}
+            />
           </div>
-          <button className="busqueda-btn-lupa">🔍</button>
+          <button className="busqueda-btn-lupa" onClick={handleSearch}>🔍</button>
         </div>
 
         <div className="busqueda-cat-grid">

@@ -79,6 +79,14 @@ export const moviesService = {
   getStreamUrl: async (id) => {
     const response = await api.get(`/videos/${id}/stream`);
     return response.data;
+  },
+  searchMovies: async (query) => {
+    // Busca películas por título (backend proxy a TMDB)
+    const response = await api.get(`/movies/search`, {
+      params: { query }
+    });
+    // La respuesta de TMDB viene en .results
+    return response.data.results || [];
   }
 };
 
