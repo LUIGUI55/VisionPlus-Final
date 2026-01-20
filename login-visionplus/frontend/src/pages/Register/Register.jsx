@@ -10,9 +10,10 @@ export default function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const email = e.target[0].value;
-    const password = e.target[1].value;
-    const confirmPassword = e.target[2].value;
+    const formData = new FormData(e.target);
+    const email = formData.get("email");
+    const password = formData.get("password");
+    const confirmPassword = formData.get("confirmPassword");
 
     if (password !== confirmPassword) {
       alert("Las contraseñas no coinciden");
@@ -46,10 +47,11 @@ export default function Register() {
           <h1>Crear cuenta</h1>
 
           <form onSubmit={handleSubmit}>
-            <input type="text" placeholder="Correo electrónico o usuario" required />
+            <input type="text" name="email" placeholder="Correo electrónico o usuario" required />
 
             <div className="password-wrapper">
               <input
+                name="password"
                 type={showPassword ? "text" : "password"}
                 placeholder="Contraseña"
                 required
@@ -70,6 +72,7 @@ export default function Register() {
 
             <div className="password-wrapper">
               <input
+                name="confirmPassword"
                 type={showConfirmPassword ? "text" : "password"}
                 placeholder="Confirmar contraseña"
                 required
