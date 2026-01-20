@@ -94,3 +94,22 @@ Inspirado en plataformas como SoundCloud, el reproductor de video no es estátic
 - **Sincronización de Eventos**: Utilizamos `useEffect` en React conectado al evento `timeupdate` del elemento `<video>`.
 - **Lógica**: Cada vez que el video avanza, el código verifica si hay reacciones (emojis) guardadas para ese segundo exacto.
 - **Overlay**: Si hay coincidencia, se renderiza un componente "flotante" sobre el video en tiempo real, creando una experiencia comunitaria.
+
+## 5. Cambios Recientes y Optimizaciones (Changelog)
+
+### Seguridad y Auth Flow
+
+- **Corrección en Portada**: Se eliminó la vulnerabilidad que permitía acceso no autorizado con correos no registrados.
+- **Redirección Inteligente**: Ahora, al ingresar un correo en la landing page, el sistema redirige a `/register` y pre-llena el formulario automáticamente.
+
+### Mejoras en Landing Page
+
+- **Simplificación**: Se limpió la interfaz eliminando el formulario directo para evitar confusiones, dejando solo call-to-actions claros.
+- **Carrusel Automático**: Se implementó un carrusel 3D en la columna derecha que consume la API de TMDB para mostrar películas populares en tiempo real.
+- **Fondo Animado**: Implementación de un fondo dinámico con gradientes y "cintas de colores" (ribbons) en movimiento usando CSS puro y animaciones keyframes.
+- **Optimización CSS**: Mejoras en la opacidad y visibilidad de los elementos para asegurar contraste.
+
+### Fixes de UI/UX
+
+- **Bug de "Pantalla Blanca" en Video**: Se solucionó el problema donde el iframe colapsaba el layout. Ahora usa un contenedor con `aspect-ratio: 16/9`.
+- **Emojis**: Se confinaron los emojis dentro del área del video (`overflow: hidden`) para evitar que floten sobre la interfaz general.

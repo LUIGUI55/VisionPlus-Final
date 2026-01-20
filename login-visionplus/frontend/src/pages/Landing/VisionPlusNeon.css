@@ -100,6 +100,8 @@ body {
   position: relative;
   overflow: hidden;
   padding-top: 64px;
+  background-color: transparent;
+  /* Ensure visibility of pseudo-elements/body */
 }
 
 .hero::before {
@@ -112,10 +114,10 @@ body {
   z-index: -2;
   background: linear-gradient(45deg,
       #0b0f16,
-      #1a1e26,
+      #1d1429,
+      /* Lighter purple */
       #2d1b4e,
-      /* Dark purple */
-      #1a1e26,
+      #1d1429,
       #0b0f16);
   background-size: 400% 400%;
   animation: gradientBG 15s ease infinite;
@@ -131,13 +133,15 @@ body {
   bottom: 0;
   z-index: -1;
   background-image:
-    linear-gradient(120deg, transparent 30%, rgba(157, 78, 221, 0.15) 40%, transparent 50%),
-    linear-gradient(60deg, transparent 40%, rgba(76, 29, 149, 0.15) 50%, transparent 60%),
-    linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.8) 100%);
-  /* Fade bottom */
+    linear-gradient(120deg, transparent 30%, rgba(157, 78, 221, 0.45) 45%, transparent 60%),
+    linear-gradient(60deg, transparent 35%, rgba(76, 29, 149, 0.45) 55%, transparent 65%),
+    linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.5) 100%);
   background-size: 200% 200%;
-  animation: ribbonMove 10s linear infinite;
+  animation: ribbonMove 8s linear infinite;
+  /* Faster for visibility */
   pointer-events: none;
+  mix-blend-mode: screen;
+  /* Enhance glow */
 }
 
 @keyframes gradientBG {
