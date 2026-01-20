@@ -110,27 +110,62 @@ body {
   width: 100%;
   height: 100%;
   z-index: -2;
-  background:
-    radial-gradient(circle at 80% 20%,
-      rgba(157, 78, 221, 0.1) 0%,
-      rgba(0, 0, 0, 0) 45%),
-    radial-gradient(circle at 10% 90%,
-      rgba(157, 78, 221, 0.08) 0%,
-      rgba(0, 0, 0, 0) 40%),
-    #000;
+  background: linear-gradient(45deg,
+      #0b0f16,
+      #1a1e26,
+      #2d1b4e,
+      /* Dark purple */
+      #1a1e26,
+      #0b0f16);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
 }
 
+/* Ribbons / Cintas de colores */
 .hero::after {
   content: "";
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  right: 0;
+  bottom: 0;
   z-index: -1;
-  background: radial-gradient(circle at center,
-      rgba(0, 0, 0, 0) 50%,
-      var(--bg-dark) 100%);
+  background-image:
+    linear-gradient(120deg, transparent 30%, rgba(157, 78, 221, 0.15) 40%, transparent 50%),
+    linear-gradient(60deg, transparent 40%, rgba(76, 29, 149, 0.15) 50%, transparent 60%),
+    linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.8) 100%);
+  /* Fade bottom */
+  background-size: 200% 200%;
+  animation: ribbonMove 10s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes gradientBG {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes ribbonMove {
+  0% {
+    background-position: 0% 0%;
+  }
+
+  50% {
+    background-position: 100% 100%;
+  }
+
+  100% {
+    background-position: 0% 0%;
+  }
 }
 
 .hero-inner {
