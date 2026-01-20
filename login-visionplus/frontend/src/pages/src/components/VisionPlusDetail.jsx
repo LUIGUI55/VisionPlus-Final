@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { moviesService } from "../../../services/api.js";
 import { useEffect, useState } from "react";
 
