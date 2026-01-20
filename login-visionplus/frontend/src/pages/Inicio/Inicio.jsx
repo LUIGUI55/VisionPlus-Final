@@ -11,7 +11,12 @@ export default function Inicio() {
     const fetchMovies = async () => {
       try {
         const data = await moviesService.getMappedMovies();
-        setMovies(data);
+        if (Array.isArray(data)) {
+          setMovies(data);
+        } else {
+          console.warn("API did not return an array:", data);
+          setMovies([]);
+        }
       } catch (error) {
         console.error("Error fetching movies:", error);
       }
@@ -109,7 +114,7 @@ export default function Inicio() {
         <h2>Tendencias...</h2>
 
         <div className="inicio-list">
-          {movies.map((movie) => (
+          {Array.isArray(movies) && movies.map((movie) => (
             <div className="inicio-movie" key={movie._id} onClick={() => goToDetail(movie.tmdbId)} style={{ cursor: 'pointer' }}>
               <img
                 src={movie.posterPath ? `https://image.tmdb.org/t/p/w300${movie.posterPath}` : "https://placehold.co/300x420/111111/FFFFFF?text=No+Poster"}
