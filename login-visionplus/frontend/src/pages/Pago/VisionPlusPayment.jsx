@@ -3,31 +3,21 @@ import { useParams, useNavigate } from "react-router-dom";
 import "./VisionPlusPayment.css";
 
 const PLAN_NAMES = {
-  BASICO: "Plan BÁSICO",
+  FREE: "Plan FREE",
   PREMIUM: "Plan PREMIUM",
   FAMILY: "Plan FAMILY",
-};
-
-const PLAN_PRICES = {
-  BASICO: "$120",
-  PREMIUM: "$250",
-  FAMILY: "$500",
 };
 
 export default function VisionPlusPayment() {
   const { plan } = useParams();
   const navigate = useNavigate();
   const [method, setMethod] = useState("card");
-  const [loading, setLoading] = useState(false);
+
 
   const planKey = (plan || "").toUpperCase();
 
   const nombrePlan = useMemo(() => {
     return PLAN_NAMES[planKey] || "Plan seleccionado";
-  }, [planKey]);
-
-  const precioPlan = useMemo(() => {
-    return PLAN_PRICES[planKey] || "";
   }, [planKey]);
 
   const goToBusqueda = () => navigate("/busqueda");
@@ -38,26 +28,32 @@ export default function VisionPlusPayment() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
 
-    // Simulación de procesamiento de pago
-    setTimeout(() => {
-      setLoading(false);
-      // alert(`¡Pago exitoso! Bienvenido a tu ${nombrePlan}.`); // Removed blocking alert
-      navigate("/inicio");
-    }, 500); // Reduced time for better UX
+    if (method === "card") {
+      alert("Pago con tarjeta procesado correctamente (demo)");
+    } else if (method === "paypal") {
+      alert("Serías redirigido a PayPal para completar el pago (demo)");
+    } else if (method === "code") {
+      alert("Código aplicado correctamente (demo)");
+    }
+
+    navigate("/inicio");
   };
 
   return (
     <div className="vpay-page">
       <header className="inicio-navbar">
+        {/* LOGO */}
         <div className="inicio-logo brand" onClick={() => navigate("/inicio")} style={{ cursor: "pointer" }}>
           VISIONPLUS
         </div>
+
+        {/* NAVEGACIÓN (Inicio / Mi Plan) */}
         <nav className="inicio-nav">
           <a href="#" onClick={(e) => { e.preventDefault(); navigate("/inicio"); }}>
             Inicio
           </a>
+          {/* El enlace a Mi plan está activo en esta página de pago */}
           <a
             href="#"
             className="active"
@@ -66,6 +62,8 @@ export default function VisionPlusPayment() {
             Mi plan
           </a>
         </nav>
+
+        {/* BARRA DE BÚSQUEDA (El CSS maneja el margin: auto;) */}
         <div className="inicio-search-box" onClick={goToBusqueda}>
           <input
             type="text"
@@ -83,9 +81,16 @@ export default function VisionPlusPayment() {
             🔍
           </button>
         </div>
-        <div className="inicio-user">
-          <div onClick={goToPerfil} style={{ cursor: "pointer" }}>Perfil</div>
-          <div onClick={goToNotifications} style={{ cursor: "pointer" }}>Notificaciones</div>
+
+        {/* ACCIONES DE USUARIO (Perfil / Notificaciones) */}
+        {/* Se usa la clase 'inicio-user' tal como está definida en tu CSS */}
+        <div className="inicio-user"> 
+          <div onClick={goToPerfil} style={{ cursor: "pointer" }}>
+            Perfil
+          </div>
+          <div onClick={goToNotifications} style={{ cursor: "pointer" }}>
+            Notificaciones
+          </div>
         </div>
       </header>
 
@@ -100,15 +105,11 @@ export default function VisionPlusPayment() {
           </header>
 
           <div className="vpay-layout">
+            {/* Resumen */}
             <aside className="vpay-summary">
               <h3>Resumen del plan</h3>
               <div className="vpay-summary-card">
                 <div className="vpay-summary-title">{nombrePlan}</div>
-                {precioPlan && (
-                  <div style={{ fontSize: '1.5rem', fontWeight: 'bold', margin: '8px 0', color: '#9d4edd' }}>
-                    {precioPlan} <small style={{ fontSize: '0.9rem', color: '#aeb3c2' }}>/mes</small>
-                  </div>
-                )}
                 <ul>
                   <li>Acceso completo al catálogo</li>
                   <li>Calidad HD / 4K según el plan</li>
@@ -125,6 +126,7 @@ export default function VisionPlusPayment() {
               </button>
             </aside>
 
+            {/* Form */}
             <section className="vpay-form-wrap">
               <form className="vpay-form" onSubmit={handleSubmit}>
                 <div className="vpay-methods">
@@ -151,16 +153,28 @@ export default function VisionPlusPayment() {
                   </button>
                 </div>
 
+                {/* CARD */}
                 {method === "card" && (
                   <>
                     <div className="vpay-field">
                       <label>Nombre en la tarjeta</label>
-                      <input type="text" placeholder="Como aparece en la tarjeta" required />
+                      <input
+                        type="text"
+                        placeholder="Como aparece en la tarjeta"
+                        required
+                      />
                     </div>
+
                     <div className="vpay-field">
                       <label>Número de tarjeta</label>
-                      <input type="text" inputMode="numeric" placeholder="1234 5678 9012 3456" required />
+                      <input
+                        type="text"
+                        inputMode="numeric"
+                        placeholder="1234 5678 9012 3456"
+                        required
+                      />
                     </div>
+
                     <div className="vpay-row">
                       <div className="vpay-field">
                         <label>Vencimiento</label>
@@ -171,6 +185,7 @@ export default function VisionPlusPayment() {
                         <input type="password" placeholder="•••" required />
                       </div>
                     </div>
+
                     <div className="vpay-field">
                       <label>País / Región</label>
                       <select defaultValue="mx" required>
@@ -183,12 +198,18 @@ export default function VisionPlusPayment() {
                   </>
                 )}
 
+                {/* PAYPAL */}
                 {method === "paypal" && (
                   <>
                     <div className="vpay-field">
                       <label>Correo asociado a PayPal</label>
-                      <input type="email" placeholder="tu-correo@ejemplo.com" required />
+                      <input
+                        type="email"
+                        placeholder="tu-correo@ejemplo.com"
+                        required
+                      />
                     </div>
+
                     <p className="vpay-safe-text">
                       Al continuar, te redirigiremos a PayPal para que inicies
                       sesión y confirmes el pago.
@@ -196,12 +217,18 @@ export default function VisionPlusPayment() {
                   </>
                 )}
 
+                {/* CODE */}
                 {method === "code" && (
                   <>
                     <div className="vpay-field">
                       <label>Código de regalo / promoción</label>
-                      <input type="text" placeholder="Ingresa tu código" required />
+                      <input
+                        type="text"
+                        placeholder="Ingresa tu código"
+                        required
+                      />
                     </div>
+
                     <p className="vpay-safe-text">
                       Si tu código es válido, se aplicará automáticamente al plan
                       seleccionado.
@@ -209,14 +236,10 @@ export default function VisionPlusPayment() {
                   </>
                 )}
 
-                <button type="submit" className="vpay-submit" disabled={loading} style={{ opacity: loading ? 0.7 : 1 }}>
-                  {loading ? "Procesando pago..." : (
-                    <>
-                      {method === "card" && "Confirmar pago y continuar"}
-                      {method === "paypal" && "Ir a PayPal y continuar"}
-                      {method === "code" && "Canjear código y continuar"}
-                    </>
-                  )}
+                <button type="submit" className="vpay-submit">
+                  {method === "card" && "Confirmar pago y continuar"}
+                  {method === "paypal" && "Ir a PayPal y continuar"}
+                  {method === "code" && "Canjear código y continuar"}
                 </button>
 
                 <p className="vpay-safe-text">
@@ -226,10 +249,6 @@ export default function VisionPlusPayment() {
             </section>
           </div>
         </section>
-
-        <footer className="vp-footer">
-          © 2025 VisionPlus · Todos los derechos reservados
-        </footer>
       </main>
     </div>
   );

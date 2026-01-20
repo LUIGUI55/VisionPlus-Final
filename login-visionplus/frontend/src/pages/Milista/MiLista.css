@@ -1,0 +1,313 @@
+:root{
+  --i-bg: #0b0f16;
+  --i-panel: #14171f;
+  --i-panel2: #1a1e26;
+  --i-text: #e5e7eb;
+  --i-purple: #9d4edd;
+  --i-purple2: #7b2cbf;
+  --i-glow: #c77dff;
+  --translucent-border: rgba(199, 125, 255, 0.16);
+}
+
+* { box-sizing: border-box; }
+
+.milista-page {
+  min-height:100vh;
+  background:
+    radial-gradient(1000px 600px at 50% -10%, rgba(199,125,255,.12), transparent 70%),
+    var(--i-bg);
+  color:var(--i-text);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+.milista-topbar{
+  position:sticky;
+  top:0;
+  z-index:50;
+  display:flex;
+  gap:20px;
+  align-items:center;
+  padding:10px 24px;
+  background:var(--i-panel);
+  border-bottom:1px solid var(--translucent-border);
+}
+
+.milista-brand.brand {
+  font-weight:900; 
+  font-size:1.35rem; 
+  display:flex; 
+  align-items:center; 
+  color:var(--i-purple); 
+  text-transform: uppercase;
+  margin-right: 16px; 
+}
+.milista-brand.brand::before {
+  content: "";
+  display: block;
+  width: 23px; 
+  height: 23px; 
+  border-radius: 8px; 
+  background-color: var(--i-purple); 
+  margin-right: 6px; 
+  box-shadow: 0 0 15px 5px rgba(157, 78, 221, 0.964);
+}
+
+.milista-nav{ display:flex; gap:12px; }
+.milista-nav a{
+  padding:6px 10px; border-radius:6px;
+  text-decoration:none; cursor:pointer; color:var(--i-text);
+  transition: all 0.2s; 
+  outline: 2px solid transparent;
+}
+.milista-nav a.active{
+  background:rgba(157, 78, 221, 0.15); 
+  outline:2px solid var(--i-purple); 
+}
+.milista-nav a:hover{
+  outline:2px solid var(--i-purple); 
+}
+
+.milista-search-box{
+  display:flex; align-items:center; gap:6px; 
+  margin:auto; 
+  background:var(--i-panel2); 
+  border:1px solid var(--translucent-border); 
+  padding:6px 10px; border-radius:999px;
+  cursor: pointer;
+}
+.milista-search-box input{
+  background:transparent; border:none; color:var(--i-text); outline:none;
+  flex:1;
+}
+.milista-search-box button{
+  width: auto;
+  height: auto;
+  background: transparent;
+  border: none;
+  color: var(--i-text);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 0px; 
+}
+
+.milista-user.right { 
+  display:flex; 
+  gap:16px; 
+  margin-left: 20px; 
+}
+.milista-user.right div {
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  outline: 2px solid transparent;
+  transition: outline 0.2s;
+  color: var(--i-text);
+}
+.milista-user.right div:hover {
+  outline: 2px solid var(--i-purple);
+}
+
+
+.milista-main{
+  padding:40px 50px;
+}
+
+.milista-main h1{
+  font-size:2.5rem;
+  font-weight:800;
+  margin-bottom:6px;
+}
+.milista-subtitle{
+  color:var(--translucent-border);
+  margin-bottom:30px;
+}
+
+.milista-tabs{
+  display:flex;
+  gap:30px;
+  margin-bottom:40px;
+}
+.milista-tabs button{
+  background:transparent;
+  border:none;
+  color:var(--i-text);
+  font-weight:700;
+  cursor:pointer;
+  font-size:1rem;
+  transition:0.3s;
+  padding-bottom:4px;
+  border-bottom:2px solid transparent;
+  outline:none;
+}
+.milista-tabs button.active{
+  color:var(--i-glow);
+  border-bottom:2px solid var(--i-glow);
+}
+.milista-tabs button:hover{
+  color:var(--i-glow);
+}
+
+.milista-cards{
+  display:flex;
+  gap:26px; 
+  flex-wrap:wrap;
+  justify-content: flex-start;
+}
+.milista-empty-message {
+    color: var(--i-text);
+    width: 100%;
+    text-align: center;
+    opacity: 0.7;
+    margin-top: 30px;
+}
+
+.milista-card.card{
+  width: calc((100% - 130px) / 6); 
+  min-width: 180px; 
+  background:var(--i-panel2);
+  border-radius:10px;
+  overflow:hidden;
+  box-shadow:0 0 8px 0 rgba(157, 78, 221, 0.3);
+  border: 2px solid var(--i-purple);
+  transition:transform 0.3s, box-shadow 0.3s;
+  cursor:pointer;
+  position:relative;
+}
+.milista-card.card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 0 15px 0 rgba(157, 78, 221, 0.6);
+}
+.milista-card.card img{
+  width:100%;
+  height: auto; 
+  aspect-ratio: 3/4.2; 
+  border-radius:8px;
+  object-fit:cover;
+}
+.milista-card-info{
+  padding:10px 12px 14px;
+}
+.milista-card-title{
+  margin:0 0 4px;
+  font-weight:800;
+  color:var(--i-text);
+}
+
+.milista-card-meta{
+  margin:0 0 4px;
+  font-size:.85rem;
+  color:var(--i-text); 
+  opacity: 0.8;
+}
+
+.milista-card-desc{
+  margin:0 0 4px;
+  font-size:.8rem;
+  color:var(--i-text); 
+  opacity: 0.8;
+  height: 3em; 
+  overflow: hidden;
+}
+
+.milista-trash.trash{
+  position:fixed;
+  bottom:40px;
+  right:60px;
+  width:50px;
+  height:50px;
+  background:transparent;
+  border:2px solid var(--i-glow);
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 0 15px rgba(199,125,255,0.3);
+  transition:0.3s;
+  cursor:pointer;
+}
+.milista-trash.trash:hover{
+  background:var(--i-glow);
+  color:#fff;
+  box-shadow:0 0 25px var(--i-glow);
+}
+.milista-trash.trash svg{
+  width:26px;
+  height:26px;
+  fill:var(--i-glow);
+  transition:0.3s;
+}
+.milista-trash.trash:hover svg{
+  fill:white;
+}
+
+.milista-modal-bg{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.8);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:999;
+}
+.milista-modal.modal{
+  background:var(--i-panel);
+  padding:30px 40px;
+  border-radius:16px;
+  text-align:center;
+  box-shadow:0 0 25px rgba(199,125,255,0.4);
+  max-width: 400px;
+}
+.milista-modal.modal h2{
+  margin-bottom:20px;
+  color:var(--i-text);
+  font-size: 1.2rem;
+}
+.milista-modal-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+.milista-modal-list button {
+    padding: 10px;
+    background: var(--i-panel2);
+    color: var(--i-text);
+    border: 1px solid var(--translucent-border);
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+}
+.milista-modal-list button:hover {
+    background: rgba(157, 78, 221, 0.1);
+    border-color: var(--i-purple);
+}
+
+.milista-modal-buttons.modal-buttons{
+  display:flex;
+  justify-content:center;
+  gap:20px;
+}
+.milista-modal-buttons button{
+  padding:10px 18px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:700;
+}
+.milista-modal-buttons .cancel{
+  background:transparent;
+  color:var(--i-text);
+  border:1px solid var(--translucent-border);
+  transition: background 0.2s;
+}
+.milista-modal-buttons .cancel:hover {
+    background: rgba(157, 78, 221, 0.1);
+}

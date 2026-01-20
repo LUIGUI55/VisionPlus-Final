@@ -5,6 +5,10 @@ import "./VisionPlusPlan.css";
 export default function VisionPlusPlan() {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
+  const hasSession = () => {
+    const token = localStorage.getItem("token"); 
+    return Boolean(token);
+  };
 
   const handleSelect = (plan) => {
     navigate(`/pago/${plan}`);
@@ -19,22 +23,35 @@ export default function VisionPlusPlan() {
 
   const goToPerfil = () => navigate("/perfil");
   const goToNotifications = () => navigate("/notificaciones");
-
-  // MODIFICACIÓN CLAVE: Navega directamente a la ruta raíz ("/")
   const goBack = () => navigate("/");
+  const goToMiLista = (e) => {
+    e.preventDefault();
+
+    if (!hasSession()) {
+      navigate("/");
+      return;
+    }
+
+    const ok = window.confirm(
+      "Ya tienes una sesión iniciada. ¿Deseas ir a Mi Lista?"
+    );
+    if (ok) navigate("/milista");
+  };
+  const goToMiPlan = (e) => {
+    e.preventDefault();
+  };
 
   return (
     <div className="vpp-body">
-
-      {/* BARRA SUPERIOR - USANDO CLASES DE 'INICIO' */}
       <header className="inicio-navbar">
-
-        {/* LOGO VISIONPLUS (vpp-brand -> inicio-logo brand) */}
-        <div className="inicio-logo brand" onClick={() => navigate("/inicio")} style={{ cursor: "pointer" }}>
+        <div
+          className="inicio-logo brand"
+          onClick={() => navigate("/inicio")}
+          style={{ cursor: "pointer" }}
+        >
           VISIONPLUS
         </div>
 
-        {/* NAVEGACIÓN PRINCIPAL (vpp-nav -> inicio-nav) */}
         <nav className="inicio-nav">
           <a
             href="#"
@@ -45,12 +62,18 @@ export default function VisionPlusPlan() {
           >
             Inicio
           </a>
-          <a href="#" className="active" onClick={(e) => e.preventDefault()}>
+
+          {}
+          <a href="#" className="active" onClick={goToMiPlan}>
             Mi Plan
+          </a>
+
+          {}
+          <a href="#" onClick={goToMiLista} style={{ cursor: "pointer" }}>
+            Mi Lista
           </a>
         </nav>
 
-        {/* BARRA DE BÚSQUEDA (vpp-search -> inicio-search-box) */}
         <form className="inicio-search-box" onSubmit={handleSearch}>
           <input
             type="text"
@@ -58,19 +81,19 @@ export default function VisionPlusPlan() {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button type="submit">
-            🔍
-          </button>
+          <button type="submit">🔍</button>
         </form>
 
-        {/* ACCIONES DE USUARIO (vpp-user-actions -> inicio-user) */}
         <div className="inicio-user">
-          <div onClick={goToPerfil} style={{ cursor: "pointer" }}>Perfil</div>
-          <div onClick={goToNotifications} style={{ cursor: "pointer" }}>Notificaciones</div>
+          <div onClick={goToPerfil} style={{ cursor: "pointer" }}>
+            Perfil
+          </div>
+          <div onClick={goToNotifications} style={{ cursor: "pointer" }}>
+            Notificaciones
+          </div>
         </div>
       </header>
 
-      {/* CONTENIDO PRINCIPAL (vpp-wrap) */}
       <main className="vpp-wrap">
         <div className="vpp-section-head">
           <h2>Mi Plan</h2>
@@ -78,40 +101,42 @@ export default function VisionPlusPlan() {
         </div>
 
         <section className="vpp-pricing">
-          {/* Plan BÁSICO */}
+          {}
           <article className="vpp-card">
             <header>
               <div className="icon">📱</div>
-              <h3>Plan BÁSICO</h3>
-              <div className="price">$120 <small>/mes</small></div>
+              <h3>Plan FREE</h3>
+              <p className="vpp-price">$99</p>
             </header>
             <ul className="vpp-features">
               <li>1 dispositivo</li>
-              <li>Catálogo completo</li>
+              <li>Catálogo limitado</li>
+              <li>Publicidad</li>
               <li>Calidad HD</li>
-              <li>Sin publicidad</li>
+              <li>Soporte estándar</li>
             </ul>
             <div className="vpp-card-footer">
               <button
                 className="vpp-btn-select"
-                onClick={() => handleSelect("BASICO")}
+                onClick={() => handleSelect("FREE")}
               >
                 Seleccionar Plan
               </button>
             </div>
           </article>
 
-          {/* Plan PREMIUM */}
+          {}
           <article className="vpp-card">
             <header>
-              <div className="icon">💻</div>
+              <div className="icon">📱</div>
               <h3>Plan PREMIUM</h3>
-              <div className="price">$250 <small>/mes</small></div>
+              <p className="vpp-price">$120</p>
             </header>
             <ul className="vpp-features">
               <li>2 dispositivos</li>
               <li>Todo el catálogo</li>
-              <li>Calidad Full HD</li>
+              <li>Sin publicidad</li>
+              <li>Full HD / 4K</li>
               <li>Descargas offline</li>
             </ul>
             <div className="vpp-card-footer">
@@ -124,18 +149,19 @@ export default function VisionPlusPlan() {
             </div>
           </article>
 
-          {/* Plan FAMILY */}
+          {}
           <article className="vpp-card">
             <header>
-              <div className="icon">🏠</div>
+              <div className="icon">📱</div>
               <h3>Plan FAMILY</h3>
-              <div className="price">$500 <small>/mes</small></div>
+              <p className="vpp-price">$150</p>
             </header>
             <ul className="vpp-features">
-              <li>4 dispositivos</li>
+              <li>Hasta 4 dispositivos</li>
               <li>Todo el catálogo</li>
-              <li>Calidad 4K HDR</li>
               <li>Perfiles infantiles</li>
+              <li>4K / HDR</li>
+              <li>Soporte prioritario</li>
             </ul>
             <div className="vpp-card-footer">
               <button
@@ -150,14 +176,9 @@ export default function VisionPlusPlan() {
 
         <p className="vpp-note">Su plan reciente es de ….</p>
 
-        {/* BOTÓN ATRÁS CON LA NAVEGACIÓN CORREGIDA */}
-        <button
-          className="vpp-back-btn"
-          onClick={goBack}
-        >
+        <button className="vpp-back-btn" onClick={goBack}>
           ← Atrás
         </button>
-
       </main>
     </div>
   );

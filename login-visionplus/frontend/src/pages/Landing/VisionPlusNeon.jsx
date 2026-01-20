@@ -10,9 +10,11 @@ export default function VisionPlusNeon() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    navigate("/register");
-  }
+    setTimeout(() => {
+        navigate("/inicio"); 
+    }, 1500); 
 
+  }
 
   function handlePlans() {
     navigate("/planes");
@@ -30,7 +32,7 @@ export default function VisionPlusNeon() {
 
         <nav className="nav" aria-label="acciones">
           <a href="/login" onClick={goLogin} aria-label="Iniciar sesión">
-            🔒 Iniciar Sesión
+            Iniciar Sesión
           </a>
         </nav>
       </header>
@@ -52,27 +54,28 @@ export default function VisionPlusNeon() {
               onSubmit={handleSubmit}
               aria-label="Registro de correo"
             >
-              <label className="sr-only" htmlFor="email">
+              <label htmlFor="email">
                 Correo electrónico
               </label>
+              
+              <div className="input-row">
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  className="input"
+                  placeholder="Ingresa tu correo electrónico"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  autoComplete="email"
+                />
 
-              <input
-                id="email"
-                name="email"
-                type="email"
-                className="input"
-                placeholder="Ingresa tu correo electrónico"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                autoComplete="email"
-              />
+                <button className="btn btn-primary" type="submit">
+                  Empezar ahora
+                </button>
+              </div>
 
-              <button className="btn btn-primary" type="submit">
-                Empezar ahora
-              </button>
-
-              {}
               <button
                 className="btn btn-ghost"
                 type="button"
@@ -80,15 +83,15 @@ export default function VisionPlusNeon() {
               >
                 Ver planes
               </button>
+              
+              <p className="note">Planes exclusivos para ti desde $99.</p>
+
+              {status && (
+                <p role="status" aria-live="polite" className="status">
+                  {status}
+                </p>
+              )}
             </form>
-
-            <p className="note">Planes exclusivos para ti desde $120.</p>
-
-            {status && (
-              <p role="status" aria-live="polite" className="status">
-                {status}
-              </p>
-            )}
           </section>
         </div>
 

@@ -1,8 +1,7 @@
-
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import API_URL from "../../config";
 import "./VisionPlusLogin.css";
+import { authService } from "../../services/api";
 
 export default function VisionPlusLogin({ backgroundUrl = "fondo.jpg" }) {
 
@@ -17,30 +16,12 @@ export default function VisionPlusLogin({ backgroundUrl = "fondo.jpg" }) {
     e.preventDefault();
     const data = Object.fromEntries(new FormData(e.target));
 
-
-
     try {
-      const response = await fetch(`${API_URL}/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-
-      const result = await response.json();
-
-      if (response.ok) {
-        // Guardar token
-        localStorage.setItem("token", result.access_token);
-        if (result.user) {
-          localStorage.setItem("user", JSON.stringify(result.user));
-        }
-        navigate("/inicio");
-      } else {
-        alert("Error de inicio de sesión: " + (result.message || "Credenciales inválidas"));
-      }
+      await authService.login(data.email, data.password);
+      navigate("/inicio");
     } catch (error) {
-      console.error("Error al iniciar sesión:", error);
-      alert("Error de conexión al servidor");
+      console.error("Login error:", error);
+      alert("Error al iniciar sesión. Verifica tus credenciales.");
     }
   };
 
@@ -101,15 +82,14 @@ export default function VisionPlusLogin({ backgroundUrl = "fondo.jpg" }) {
                 Iniciar sesión
               </button>
 
-              { }
               <a className="link" href="#" onClick={goChangePassword}>
                 ¿Olvidaste tu contraseña?
               </a>
             </div>
 
             <div className="bottom">
-              <span className="muted" onClick={goRegister} style={{ cursor: "pointer", textDecoration: "underline" }}>
-                ¿No tienes cuenta? Regístrate aquí
+              <span className="muted" onClick={goRegister} style={{ cursor: "pointer" }}>
+                ¿No tienes cuenta?
               </span>
 
               <label className="checkbox">

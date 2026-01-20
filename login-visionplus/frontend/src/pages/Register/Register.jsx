@@ -1,52 +1,37 @@
-
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import API_URL from "../../config";
 import "./Register.css";
+import { authService } from "../../services/api";
 
 export default function Register() {
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const email = e.target.email.value;
-    const password = e.target.password.value;
-    const confirmPassword = e.target.confirmPassword.value;
+    const email = e.target[0].value;
+    const password = e.target[1].value;
+    const confirmPassword = e.target[2].value;
 
     if (password !== confirmPassword) {
       alert("Las contraseñas no coinciden");
       return;
     }
 
-
-
     try {
-      const response = await fetch(`${API_URL}/auth/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        alert("¡Cuenta creada con éxito!");
-        navigate("/login");
-      } else {
-        alert(`Error: ${data.message || "No se pudo registrar"}`);
-      }
+      await authService.register(email, password);
+      alert("¡Cuenta creada con éxito! Ahora puedes iniciar sesión.");
+      navigate("/login");
     } catch (error) {
-      console.error("Error al registrar:", error);
-      alert("Error de conexión con el servidor");
+      console.error("Register error:", error);
+      alert("Error al registrar cuenta.");
     }
   };
 
   return (
     <div className="register-page-body">
-      <header>
-        <div className="logo">
-          <div className="logo-icon"></div>
-          <div className="logo-text">VISIONPLUS</div>
+      <header className="header">
+        <div className="brand">
+          VISIONPLUS
         </div>
 
         <a className="regresar" onClick={() => navigate("/login")}>
@@ -59,9 +44,9 @@ export default function Register() {
           <h1>Crear cuenta</h1>
 
           <form onSubmit={handleSubmit}>
-            <input name="email" type="email" placeholder="Correo electrónico" required />
-            <input name="password" type="password" placeholder="Contraseña (min 8 car, 1 May, 1 min, 1 num)" required />
-            <input name="confirmPassword" type="password" placeholder="Confirmar contraseña" required />
+            <input type="text" placeholder="Correo electrónico o usuario" required />
+            <input type="password" placeholder="Contraseña" required />
+            <input type="password" placeholder="Confirmar contraseña" required />
 
             <button type="submit">Crear Cuenta</button>
           </form>

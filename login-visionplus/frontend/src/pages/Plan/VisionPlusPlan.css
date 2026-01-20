@@ -284,3 +284,9 @@
   margin: 0 auto;
   padding: 20px;
 }
+.vpp-price{
+  margin-top: 8px;
+  font-size: 22px;
+  font-weight: 700;
+  color: #a855f7; 
+}

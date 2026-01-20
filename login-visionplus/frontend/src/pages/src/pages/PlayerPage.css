@@ -1,0 +1,38 @@
+.watch-main {
+  padding: 40px 50px;
+}
+
+.watch-title {
+  font-size: 32px;
+  font-weight: 800;
+  margin-bottom: 20px;
+}
+
+.watch__panel {
+  background: var(--i-panel2);
+  border-radius: 16px;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.55);
+  margin-bottom: 20px;
+}
+
+.video-el {
+  width: 100%;
+  border-radius: 12px;
+  background: #000;
+  aspect-ratio: 16/9;
+}
+
+.inicio-btn {
+  cursor: pointer;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  border: none;
+}
+
+.inicio-btn-primary {
+  background-color: var(--i-purple);
+  color: white;
+}

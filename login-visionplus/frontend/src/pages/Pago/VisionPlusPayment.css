@@ -308,34 +308,6 @@ cursor: pointer;
 @media (max-width: 1024px) {
  .inicio-search-box { display: none; }
 }
-
 @media (max-width: 768px) {
-  /* No ocultar nav, ajustar tamaño */
-  .inicio-nav { 
-    gap: 5px; 
-  }
-  .inicio-nav a { 
-    padding: 6px 8px; 
-    font-size: 0.85rem; 
-  }
-  .inicio-user { 
-    margin-left: auto; /* Push user to right */
-    gap: 8px; 
-  }
-  .inicio-user div {
-    padding: 6px 8px;
-    font-size: 0.85rem;
-  }
-  .inicio-navbar {
-    padding: 10px 12px;
-    gap: 8px;
-  }
-  .inicio-logo.brand {
-    font-size: 1rem;
-    margin-right: 4px;
-  }
-  .inicio-logo.brand::before {
-    width: 18px;
-    height: 18px;
-  }
+ .inicio-nav { display: none; }
 }

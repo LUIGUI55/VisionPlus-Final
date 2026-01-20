@@ -1,56 +1,32 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import API_URL from "../../config";
 import "./Inicio.css";
+import { moviesService } from "../../services/api";
 
 export default function Inicio() {
-  const [movies, setMovies] = useState([]);
   const navigate = useNavigate();
+  const [movies, setMovies] = React.useState([]);
 
-  useEffect(() => {
-    async function fetchMovies() {
+  React.useEffect(() => {
+    const fetchMovies = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const headers = { 'Authorization': `Bearer ${token}` };
-
-        // 1. Get List of Mapped Videos
-        const res = await fetch(`${API_URL}/videos/mapped`, { headers });
-        if (!res.ok) throw new Error("Failed to load mapped videos");
-        const mappedData = await res.json();
-
-        // 2. Enrich with TMDB Data
-        // We use Promise.allSettled to avoid failing everything if one TMDB lookup fails
-        const enrichedPromises = mappedData.map(async (vid) => {
-          try {
-            const tmdbRes = await fetch(`${API_URL}/movies/${vid.tmdbId}`, { headers });
-            if (tmdbRes.ok) {
-              const tmdbData = await tmdbRes.json();
-              return { ...vid, poster_path: tmdbData.poster_path, overview: tmdbData.overview };
-            }
-            return vid;
-          } catch (e) {
-            return vid;
-          }
-        });
-
-        const results = await Promise.all(enrichedPromises);
-        setMovies(results);
-
+        const data = await moviesService.getMappedMovies();
+        setMovies(data);
       } catch (error) {
-        console.error("Error loading billboard:", error);
+        console.error("Error fetching movies:", error);
       }
-    }
-
+    };
     fetchMovies();
   }, []);
 
-
-  function goToPlayer() {
-    navigate("/ver/550");
+  function goToPlayer(id) {
+    if (id) navigate(`/ver/${id}`);
+    else if (movies.length > 0) navigate(`/ver/${movies[0].tmdbId}`);
   }
 
-  function goToDetail() {
-    navigate("/detail/strangerthings");
+  function goToDetail(id) {
+    if (id) navigate(`/detail/${id}`);
+    else if (movies.length > 0) navigate(`/detail/${movies[0].tmdbId}`);
   }
 
   function goToMiLista() {
@@ -60,7 +36,6 @@ export default function Inicio() {
   function goToBusqueda() {
     navigate("/busqueda");
   }
-
 
   function goToPerfil() {
     navigate("/perfil");
@@ -73,9 +48,8 @@ export default function Inicio() {
   return (
     <div className="inicio-page">
 
-      { }
-      <header className="inicio-navbar">
-        <div className="inicio-logo">
+      <header className="inicio-navbar header">
+        <div className="inicio-logo brand">
           VISIONPLUS
         </div>
 
@@ -84,7 +58,6 @@ export default function Inicio() {
           <a onClick={goToMiLista} style={{ cursor: "pointer" }}>Mi lista</a>
         </nav>
 
-        { }
         <div className="inicio-search-box" onClick={goToBusqueda}>
           <input
             type="text"
@@ -105,28 +78,26 @@ export default function Inicio() {
         </div>
       </header>
 
-      { }
       <section className="inicio-hero">
         <div className="inicio-hero-bg"></div>
 
         <div className="inicio-hero-content">
-          <h1>Stranger Things (Demo Fight Club)</h1>
+          <h1>{movies.length > 0 ? movies[0].title : "Cargando..."}</h1>
           <p>
-            Cuando un niño desaparece, sus amigos, la familia y la policía
-            se ven envueltos en un misterio con fuerzas sobrenaturales.
+            {movies.length > 0 ? "Disfruta de nuestro contenido exclusivo." : "..."}
           </p>
 
           <div className="inicio-buttons">
             <button
               className="inicio-btn inicio-btn-primary"
-              onClick={goToPlayer}
+              onClick={() => goToPlayer(movies[0]?.tmdbId)}
             >
               Ver ahora
             </button>
 
             <button
               className="inicio-btn inicio-btn-secondary"
-              onClick={goToDetail}
+              onClick={() => goToDetail(movies[0]?.tmdbId)}
             >
               Más info
             </button>
@@ -134,31 +105,21 @@ export default function Inicio() {
         </div>
       </section>
 
-      { }
       <section className="inicio-section">
-        <h2>Mi Cartelera</h2>
+        <h2>Tendencias...</h2>
 
         <div className="inicio-list">
-          {movies.length === 0 ? (
-            <div className="text-white ml-4">No hay películas agregadas aún.</div>
-          ) : (
-            movies.map((movie, index) => (
-              <div
-                className="inicio-movie"
-                key={movie.tmdbId || index}
-                onClick={() => navigate(`/detail/${movie.tmdbId}`)}
-                style={{ cursor: 'pointer' }}
-              >
-                <img
-                  src={movie.poster_path
-                    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                    : `https://placehold.co/300x420/111111/FFFFFF?text=${encodeURIComponent(movie.title || "Video")}`}
-                  alt={movie.title}
-                />
-                <div className="inicio-movie-title">{movie.title}</div>
-              </div>
-            ))
-          )}
+          {movies.map((movie) => (
+            <div className="inicio-movie" key={movie._id} onClick={() => goToDetail(movie.tmdbId)} style={{ cursor: 'pointer' }}>
+              <img
+                src={movie.posterPath ? `https://image.tmdb.org/t/p/w300${movie.posterPath}` : "https://placehold.co/300x420/111111/FFFFFF?text=No+Poster"}
+                alt={movie.title}
+                onError={(e) => { e.target.onerror = null; e.target.src = "https://placehold.co/300x420/111111/FFFFFF?text=No+Poster" }}
+              />
+              <div className="inicio-movie-title">{movie.title}</div>
+            </div>
+          ))}
+          {movies.length === 0 && <p>No hay videos disponibles por el momento.</p>}
         </div>
       </section>
 

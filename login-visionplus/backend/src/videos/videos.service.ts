@@ -1,15 +1,21 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { ConfigService } from '@nestjs/config';
 import { Model } from 'mongoose';
 import { Video, VideoDocument } from './schemas/video.schema';
 import { MoviesService } from '../movies/movies.service';
 
 @Injectable()
 export class VideosService {
+    private defaultLibraryId: string;
+
     constructor(
         @InjectModel(Video.name) private videoModel: Model<VideoDocument>,
-        private moviesService: MoviesService
-    ) { }
+        private moviesService: MoviesService,
+        private configService: ConfigService
+    ) {
+        this.defaultLibraryId = this.configService.get<string>('BUNNY_LIBRARY_ID') || '579059';
+    }
 
     // Videos de demostración gratuitos como fallback
     private demoVideos = {
@@ -88,11 +94,13 @@ export class VideosService {
         tmdbId: number,
         bunnyVideoId: string,
         title: string,
-        libraryId: string = "579059",
+        libraryId?: string,
         type: string = 'movie',
         season?: number,
         episode?: number
     ) {
+        const targetLibraryId = libraryId || this.defaultLibraryId;
+
         // Construir query para buscar existente
         const query: any = { tmdbId };
         if (type === 'tv') {
@@ -108,7 +116,7 @@ export class VideosService {
         if (existing) {
             existing.bunnyVideoId = bunnyVideoId;
             existing.title = title;
-            existing.libraryId = libraryId;
+            existing.libraryId = targetLibraryId;
             // No cambiamos tipo ni season/episode al actualizar (son la clave)
             return existing.save();
         }
@@ -117,7 +125,7 @@ export class VideosService {
             tmdbId,
             bunnyVideoId,
             title,
-            libraryId,
+            libraryId: targetLibraryId,
             type,
             season,
             episode
