@@ -5,6 +5,7 @@ import { moviesService } from "../../services/api.js";
 export default function Inicio() {
   const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = React.useState(0);
+  const [movies, setMovies] = React.useState([]);
 
   React.useEffect(() => {
     async function fetchMovies() {
