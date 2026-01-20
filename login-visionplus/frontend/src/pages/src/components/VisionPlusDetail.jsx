@@ -85,7 +85,7 @@ export default function VisionPlusDetail() {
             <div className="bar">
               <div className="row">
                 <div className="tag"><span className="dot"></span> Latino <small style={{ opacity: .7 }}>CALIDAD HD</small></div>
-                <div className="tag"><span className="dot"></span> Descargar <small style={{ opacity: .7 }}>CALIDAD HD</small></div>
+
               </div>
             </div>
 
