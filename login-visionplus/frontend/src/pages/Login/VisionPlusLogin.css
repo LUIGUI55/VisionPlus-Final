@@ -290,3 +290,37 @@ html, body {
     gap: 10px;
   }
 }
+.password-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.password-wrapper .input {
+  padding-right: 45px;
+}
+
+.login-page .password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--muted);
+  padding: 0;
+  margin: 0;
+  width: auto;
+  height: auto;
+  box-shadow: none;
+  display: flex; /* Fix alignment */
+  align-items: center;
+}
+
+.login-page .password-toggle:hover {
+  color: var(--purple);
+  background: none;
+  transform: translateY(-50%);
+  box-shadow: none;
+}
+
