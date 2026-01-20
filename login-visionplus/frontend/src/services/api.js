@@ -87,6 +87,14 @@ export const moviesService = {
     });
     // La respuesta de TMDB viene en .results
     return response.data.results || [];
+  },
+  mapVideo: async (data, secret) => {
+    const response = await api.post('/videos/map', data, {
+      headers: {
+        'x-admin-secret': secret
+      }
+    });
+    return response.data;
   }
 };
 
