@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3000'; // Ajusta esto si tu backend corre en otro puerto
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 const api = axios.create({
   baseURL: API_URL,
@@ -39,13 +39,13 @@ export const authService = {
     localStorage.removeItem('token');
   },
   getCurrentUser: async () => {
-      // Assuming there is an endpoint for this, otherwise decode token
-       try {
-        const response = await api.get('/auth/profile');
-        return response.data;
-      } catch (error) {
-        return null; 
-      }
+    // Assuming there is an endpoint for this, otherwise decode token
+    try {
+      const response = await api.get('/auth/profile');
+      return response.data;
+    } catch (error) {
+      return null;
+    }
   }
 };
 
@@ -58,7 +58,7 @@ export const moviesService = {
     const response = await api.get(`/videos/details/${id}`);
     return response.data;
   },
-    getStreamUrl: async (id) => {
+  getStreamUrl: async (id) => {
     const response = await api.get(`/videos/${id}/stream`);
     return response.data;
   }
