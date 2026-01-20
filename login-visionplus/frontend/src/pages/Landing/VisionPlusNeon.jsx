@@ -48,33 +48,7 @@ export default function VisionPlusNeon() {
               Todo el cine, series y documentales en un solo lugar.
             </p>
 
-            <form
-              className="form"
-              onSubmit={handleSubmit}
-              aria-label="Registro de correo"
-            >
-              <label htmlFor="email">
-                Correo electrónico
-              </label>
-
-              <div className="input-row">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  className="input"
-                  placeholder="Ingresa tu correo electrónico"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  autoComplete="email"
-                />
-
-                <button className="btn btn-primary" type="submit">
-                  Empezar ahora
-                </button>
-              </div>
-
+            <div className="actions-row">
               <button
                 className="btn btn-ghost"
                 type="button"
@@ -82,15 +56,7 @@ export default function VisionPlusNeon() {
               >
                 Ver planes
               </button>
-
-              <p className="note">Planes exclusivos para ti desde $99.</p>
-
-              {status && (
-                <p role="status" aria-live="polite" className="status">
-                  {status}
-                </p>
-              )}
-            </form>
+            </div>
           </section>
         </div>
 
