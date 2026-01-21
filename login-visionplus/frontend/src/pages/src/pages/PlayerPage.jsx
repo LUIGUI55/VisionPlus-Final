@@ -19,14 +19,16 @@ export default function PlayerPage() {
         const stream = await moviesService.getStreamUrl(id);
 
         setVideoData({
-          title: stream.title || details.title || "Película",
+          title: details.title || stream.title || "Película",
+          overview: details.overview || "",
           poster: details.poster_path ? `https://image.tmdb.org/t/p/original${details.poster_path}` : "",
           source: stream.url
         });
       } catch (error) {
         console.error("Error loading video:", error);
         setVideoData({
-          title: "Modo Demo / Video No Disponible",
+          title: "Video No Disponible",
+          overview: "Lo sentimos, no pudimos cargar la información de esta película.",
           poster: "",
           source: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
         });
@@ -123,6 +125,7 @@ export default function PlayerPage() {
 
       <main className="watch-main">
         <h1 className="watch-title">{videoData.title}</h1>
+        {videoData.overview && <p className="watch-description" style={{ color: '#ccc', maxWidth: '800px', margin: '0 auto 20px', lineHeight: '1.5' }}>{videoData.overview}</p>}
         <div className="watch__panel">
           <video
             ref={videoRef}
