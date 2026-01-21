@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import Hls from "hls.js";
 import { moviesService } from "../../../services/api.js";
 import "./PlayerPage.css";
 
@@ -8,6 +9,7 @@ export default function PlayerPage() {
   const navigate = useNavigate();
   const [videoData, setVideoData] = useState(null);
   const videoRef = useRef(null);
+  const hlsRef = useRef(null);
   const storageKey = `vp-progress:${id}`;
 
   useEffect(() => {
@@ -19,14 +21,14 @@ export default function PlayerPage() {
         setVideoData({
           title: details.title || "Película",
           poster: details.poster_path ? `https://image.tmdb.org/t/p/original${details.poster_path}` : "",
-          sources: [{ src: stream.url, type: "application/x-mpegURL" }]
+          source: stream.url
         });
       } catch (error) {
         console.error("Error loading video:", error);
         setVideoData({
           title: "Error / Demo Mode",
           poster: "",
-          sources: [{ src: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8", type: "application/x-mpegURL" }]
+          source: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
         });
       }
     }
@@ -34,13 +36,45 @@ export default function PlayerPage() {
   }, [id]);
 
   useEffect(() => {
+    if (!videoData || !videoRef.current) return;
+
+    const video = videoRef.current;
+    const src = videoData.source;
+
+    // 1. Try Native HLS (Safari)
+    if (video.canPlayType("application/vnd.apple.mpegurl")) {
+      video.src = src;
+    }
+    // 2. Try Hls.js (Chrome, Firefox, Edge)
+    else if (Hls.isSupported()) {
+      if (hlsRef.current) {
+        hlsRef.current.destroy();
+      }
+      const hls = new Hls();
+      hls.loadSource(src);
+      hls.attachMedia(video);
+      hlsRef.current = hls;
+    } else {
+      console.error("HLS resolution not supported");
+    }
+
+    return () => {
+      if (hlsRef.current) {
+        hlsRef.current.destroy();
+      }
+    };
+  }, [videoData]);
+
+  // Save progress logic remains same
+  useEffect(() => {
     if (!videoData) return;
     const v = videoRef.current;
     if (!v) return;
 
     const t = Number(localStorage.getItem(storageKey) || 0);
     const onLoaded = () => {
-      if (t && v.duration && t < v.duration - 3) v.currentTime = t;
+      // Only set time if video is long enough
+      if (t > 0 && v.duration && t < v.duration - 3) v.currentTime = t;
     };
     v.addEventListener("loadedmetadata", onLoaded);
     return () => v.removeEventListener("loadedmetadata", onLoaded);
@@ -97,12 +131,7 @@ export default function PlayerPage() {
             preload="metadata"
             poster={videoData.poster}
             playsInline
-          >
-            {videoData.sources.map((s, i) => (
-              <source key={i} src={s.src} type={s.type} />
-            ))}
-            Tu navegador no soporta video HTML5.
-          </video>
+          />
         </div>
         <button className="inicio-btn inicio-btn-primary" onClick={goToInicio}>
           Regresar

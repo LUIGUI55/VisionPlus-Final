@@ -66,6 +66,7 @@ export default function VisionPlusDetail() {
               <img src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : "https://placehold.co/300x450"} alt={movie.title} />
             </figure>
             <div className="actions">
+              <button className="act-btn" style={{ backgroundColor: '#9d4edd', color: 'white', marginRight: '10px' }} onClick={() => navigate(`/ver/${id}`)}>▶ Ver ahora</button>
               <button className="act-btn">➕ Agregar a… <small>Mi lista</small></button>
             </div>
           </aside>
