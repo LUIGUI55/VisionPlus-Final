@@ -1,6 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+
+// DEPLOY TRIGGER: 2026-01-20T19:43:11 - Force Railway rebuild
 import * as dotenv from 'dotenv';
 
 // Cargar variables de entorno desde .env
