@@ -65,6 +65,15 @@ export const moviesService = {
     },
     getMappedMovies: async () => { return []; },
     getStreamUrl: async (id) => {
+        // EMERGENCY OVERRIDE: Fragmentado (381288)
+        // Eliminates DB/Backend dependency for this specific blocked video
+        if (String(id) === '381288') {
+            return {
+                title: "Fragmentado",
+                url: "https://vz-579059.b-cdn.net/ce07ee66-a348-4f43-a53b-ac570a8905fa/playlist.m3u8"
+            };
+        }
+
         try {
             const response = await api.get(`/videos/${id}/stream`);
             return response.data;
