@@ -19,14 +19,14 @@ export default function PlayerPage() {
         const stream = await moviesService.getStreamUrl(id);
 
         setVideoData({
-          title: details.title || "Película",
+          title: stream.title || details.title || "Película",
           poster: details.poster_path ? `https://image.tmdb.org/t/p/original${details.poster_path}` : "",
           source: stream.url
         });
       } catch (error) {
         console.error("Error loading video:", error);
         setVideoData({
-          title: "Error / Demo Mode",
+          title: "Modo Demo / Video No Disponible",
           poster: "",
           source: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
         });

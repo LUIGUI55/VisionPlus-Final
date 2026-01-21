@@ -1,6 +1,10 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://visionplus-final-production-bb72.up.railway.app';
+// Sanitize URL: remove trailing slash and /api if present to avoid double path issues
+const RAW_URL = import.meta.env.VITE_API_URL || 'https://visionplus-final-production-bb72.up.railway.app';
+const API_URL = RAW_URL.replace(/\/api\/?$/, '').replace(/\/$/, '');
+
+console.log("VisionPlus API Configured URL:", API_URL);
 
 const api = axios.create({
     baseURL: API_URL,
@@ -61,8 +65,17 @@ export const moviesService = {
     },
     getMappedMovies: async () => { return []; },
     getStreamUrl: async (id) => {
-        const response = await api.get(`/videos/${id}/stream`);
-        return response.data;
+        try {
+            const response = await api.get(`/videos/${id}/stream`);
+            return response.data;
+        } catch (error) {
+            console.warn("Stream fetch failed, returning demo stream", error);
+            // Fallback to a working HLS stream for testing
+            return {
+                url: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+                title: "Modo Demo (Backend Off)"
+            };
+        }
     },
     getVideoDetails: async (id) => {
         try {
