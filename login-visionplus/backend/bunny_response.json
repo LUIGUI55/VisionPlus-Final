@@ -1,0 +1,52 @@
+{
+  "videoLibraryId": 579059,
+  "guid": "ce07ee66-a348-4f43-a53b-ac570a8905fa",
+  "title": "Gran_Turismo_De_jugador_a_corredor_4896.mp4",
+  "description": null,
+  "dateUploaded": "2026-01-15T14:08:48.735",
+  "views": 0,
+  "isPublic": false,
+  "length": 8055,
+  "status": 4,
+  "framerate": 23.976,
+  "rotation": 0,
+  "width": 720,
+  "height": 576,
+  "availableResolutions": "360p,480p,720p,240p",
+  "outputCodecs": "x264",
+  "thumbnailCount": 4028,
+  "encodeProgress": 100,
+  "storageSize": 7035602937,
+  "captions": [],
+  "hasMP4Fallback": true,
+  "collectionId": "",
+  "thumbnailFileName": "thumbnail.jpg",
+  "thumbnailBlurhash": "WA7^_QIU00%M%gIAt7WBRjofozWBf6ayaykCofj[offQf6WBa|ax",
+  "averageWatchTime": 0,
+  "totalWatchTime": 0,
+  "category": "movie",
+  "chapters": [],
+  "moments": [],
+  "metaTags": [],
+  "transcodingMessages": [
+    {
+      "timeStamp": "2026-01-15T14:10:14.1254955Z",
+      "level": 2,
+      "issueCode": 1,
+      "message": "Audio and Video stream lengths are not same, difference: 0.076 s. Audio stream was automatically padded with silence.",
+      "value": "0.08"
+    },
+    {
+      "timeStamp": "2026-01-15T14:10:14.1255171Z",
+      "level": 1,
+      "issueCode": 4,
+      "message": "Source video stream has variable framerate",
+      "value": "23.98"
+    }
+  ],
+  "jitEncodingEnabled": false,
+  "smartGenerateStatus": null,
+  "hasOriginal": true,
+  "originalHash": "B307D6534A42528346922512CDFF5D1A2CB7E81D8B2EA85734F75BA2643426B6",
+  "hasHighQualityPreview": null
+}

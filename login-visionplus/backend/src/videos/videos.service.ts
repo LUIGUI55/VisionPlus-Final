@@ -71,11 +71,17 @@ export class VideosService {
 
         if (video) {
             console.log(`🎥 Found real video for ${tmdbId} (S:${video.season} E:${video.episode}): ${video.title}`);
+            // Construct HLS URL assuming standard Bunny Stream pattern
+            // Hostname is usually vz-{libraryId}.b-cdn.net
+            const libId = video.libraryId || this.defaultLibraryId;
+            const hlsUrl = `https://vz-${libId}.b-cdn.net/${video.bunnyVideoId}/playlist.m3u8`;
+
             return {
                 type: 'bunny',
                 videoId: video.bunnyVideoId,
-                libraryId: video.libraryId,
-                title: video.title
+                libraryId: libId,
+                title: video.title,
+                url: hlsUrl // Added URL for player
             };
         }
 
