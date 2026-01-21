@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://visionplus-final-production-bb72.up.railway.app/api';
+const API_URL = import.meta.env.VITE_API_URL || 'https://visionplus-final-production-bb72.up.railway.app';
 
 const api = axios.create({
     baseURL: API_URL,
@@ -65,8 +65,14 @@ export const moviesService = {
         return response.data;
     },
     getVideoDetails: async (id) => {
-        const response = await api.get(`/movies/${id}`);
-        return response.data;
+        try {
+            const response = await api.get(`/movies/${id}`);
+            return response.data;
+        } catch (error) {
+            console.warn("Backend detail fetch failed, trying TMDB fallback", error);
+            const res = await axios.get(`https://api.themoviedb.org/3/movie/${id}?api_key=213094b8e75a9d685ffb81fb0a71babc&language=es-MX&append_to_response=credits,videos`);
+            return res.data;
+        }
     }
 };
 
