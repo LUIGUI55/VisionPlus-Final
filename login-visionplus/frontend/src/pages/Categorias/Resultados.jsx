@@ -1,30 +1,46 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { moviesService } from "../../services/api.js";
 import "./Resultados.css";
 
 const Resultados = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const [peliculas, setPeliculas] = useState([]);
 
   useEffect(() => {
     setIsOpen(true);
-    const ejemploPeliculas = [
-      { titulo: "Película A", img: "https://placehold.co/300x450/9d4edd/FFFFFF?text=A", id: "a" },
-      { titulo: "Película B", img: "https://placehold.co/300x450/9d4edd/FFFFFF?text=B", id: "b" },
-      { titulo: "Película C", img: "https://placehold.co/300x450/9d4edd/FFFFFF?text=C", id: "c" },
-      { titulo: "Película D", img: "https://placehold.co/300x450/9d4edd/FFFFFF?text=D", id: "d" },
-      { titulo: "Película E", img: "https://placehold.co/300x450/9d4edd/FFFFFF?text=E", id: "e" },
-      { titulo: "Película F", img: "https://placehold.co/300x450/9d4edd/FFFFFF?text=E", id: "f" },
-      
-    ];
-    setPeliculas(ejemploPeliculas);
+
+    // Parse search from URL
+    const searchParams = new URLSearchParams(location.search);
+    const query = searchParams.get("search");
+
+    if (query) {
+      async function fetchResults() {
+        try {
+          const results = await moviesService.searchMovies(query);
+          // Map TMDB results to component format
+          const mapped = results.map(doc => ({
+            id: doc.id,
+            titulo: doc.title || doc.name,
+            img: doc.poster_path
+              ? `https://image.tmdb.org/t/p/w500${doc.poster_path}`
+              : "https://placehold.co/300x450/111111/FFFFFF?text=No+Image"
+          }));
+          setPeliculas(mapped);
+        } catch (error) {
+          console.error("Search failed", error);
+        }
+      }
+      fetchResults();
+    }
 
     document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = "unset";
     };
-  }, []);
+  }, [location.search]);
 
   const closeResultados = () => {
     setIsOpen(false);
@@ -47,6 +63,7 @@ const Resultados = () => {
         <div className="resultados-title">Resultados de tu búsqueda</div>
 
         <div className="resultados-grid">
+          {peliculas.length === 0 && <p style={{ color: 'white', textAlign: 'center', width: '100%' }}>No se encontraron resultados.</p>}
           {peliculas.map((p, i) => (
             <div
               key={i}
