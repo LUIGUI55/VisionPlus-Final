@@ -64,10 +64,10 @@ body {
 .landing-carousel-container {
   position: relative;
   width: 100%;
-  max-width: 400px;
-  height: 240px;
+  max-width: 450px;
+  height: 320px;
   margin: 0;
-  perspective: 1000px;
+  perspective: 1200px;
 }
 
 .carousel-track {
@@ -81,12 +81,12 @@ body {
 
 .carousel-slide-landing {
   position: absolute;
-  width: 130px;
-  height: 195px;
-  border-radius: 10px;
+  width: 180px;
+  height: 270px;
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
-  border: 2px solid rgba(157, 78, 221, 0.3);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+  border: 2px solid rgba(157, 78, 221, 0.4);
   animation: carousel-rotate 18s infinite ease-in-out;
   transition: all 0.3s ease;
 }
@@ -109,14 +109,14 @@ body {
 
   0%,
   100% {
-    transform: translateX(-150px) scale(0.75);
-    opacity: 0.4;
+    transform: translateX(-180px) scale(0.8);
+    opacity: 0.5;
     z-index: 1;
   }
 
   16.66% {
-    transform: translateX(-75px) scale(0.85);
-    opacity: 0.6;
+    transform: translateX(-90px) scale(0.9);
+    opacity: 0.7;
     z-index: 2;
   }
 
@@ -127,20 +127,20 @@ body {
   }
 
   50% {
-    transform: translateX(75px) scale(0.85);
-    opacity: 0.6;
+    transform: translateX(90px) scale(0.9);
+    opacity: 0.7;
     z-index: 2;
   }
 
   66.66% {
-    transform: translateX(150px) scale(0.75);
-    opacity: 0.4;
+    transform: translateX(180px) scale(0.8);
+    opacity: 0.5;
     z-index: 1;
   }
 
   83.33% {
-    transform: translateX(150px) scale(0.75);
-    opacity: 0.4;
+    transform: translateX(180px) scale(0.8);
+    opacity: 0.5;
     z-index: 1;
   }
 }
@@ -223,7 +223,7 @@ body {
   width: 90%;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1fr 400px;
+  grid-template-columns: 1fr 480px;
   gap: 60px;
   padding: 32px 0;
   align-items: center;
@@ -372,7 +372,7 @@ h1 .hl {
 
 @media (min-width: 900px) {
   .hero-inner {
-    grid-template-columns: 1fr 400px;
+    grid-template-columns: 1fr 480px;
     align-items: center;
     min-height: calc(100vh - 64px);
   }
