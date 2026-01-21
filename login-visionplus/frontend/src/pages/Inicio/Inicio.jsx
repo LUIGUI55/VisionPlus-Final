@@ -126,71 +126,22 @@ export default function Inicio() {
           </div>
         </div>
       </section>
-      {movies.slice(0, 5).map((movie, index) => {
-        // Calculate relative index for visual stacking
-        // We want the current slide in front, next ones behind
-        let offset = index - currentSlide;
-        if (offset < 0) offset += movies.length > 5 ? 5 : movies.length;
 
-        // Only show if it's one of the immediate next ones or current
-        // Simple stack logic: 
-        // 0 (front): scale 1, transX 0, z 10, opacity 1
-        // 1 (behind 1): scale 0.9, transX 40px, z 5, opacity 0.8
-        // 2 (behind 2): scale 0.8, transX 80px, z 1, opacity 0.6
+      <section className="inicio-section">
+        <h2>Tendencias...</h2>
 
-        // Simplified for this loop: Just simple mapping based on 'index' vs 'currentSlide' logic above is cyclic 
-        // Ideally we treat 'currentSlide' as the front one.
-
-        // Let's use simpler logic matching the map index for now if simpler
-        // But 'currentSlide' changes. 
-
-        // Fix: Just render the movies shifted by currentSlide visually?
-        // Better: Render static list but change classes? 
-
-        // Let's stick to the previous simple logic but improved:
-        const isActive = index === currentSlide;
-        let style = {};
-
-        if (isActive) {
-          style = { transform: 'translateX(0) scale(1)', zIndex: 10, opacity: 1 };
-        } else if (index === (currentSlide + 1) % 5) {
-          style = { transform: 'translateX(40px) scale(0.9)', zIndex: 5, opacity: 0.7 };
-        } else if (index === (currentSlide + 2) % 5) {
-          style = { transform: 'translateX(80px) scale(0.8)', zIndex: 1, opacity: 0.4 };
-        } else {
-          style = { opacity: 0, pointerEvents: 'none' };
-        }
-
-        return (
-          <div
-            key={movie.id}
-            className={`carousel-slide ${isActive ? "active" : ""}`}
-            style={style}
-            onClick={() => goToDetail(movie)}
-          >
-            <img src={getImageUrl(movie.poster_path)} alt={movie.title} />
-          </div>
-        );
-      })}
-    </div>
-        </div >
-      </section >
-
-    <section className="inicio-section">
-      <h2>Tendencias...</h2>
-
-      <div className="inicio-list">
-        {movies.slice(1).map((movie) => (
-          <div className="inicio-movie" key={movie.id} onClick={() => goToDetail(movie)}>
-            <img
-              src={getImageUrl(movie.poster_path)}
-              alt={movie.title}
-            />
-            <div className="inicio-movie-title">{movie.title}</div>
-          </div>
-        ))}
-      </div>
-    </section>
+        <div className="inicio-list">
+          {movies.slice(1).map((movie) => (
+            <div className="inicio-movie" key={movie.id} onClick={() => goToDetail(movie)}>
+              <img
+                src={getImageUrl(movie.poster_path)}
+                alt={movie.title}
+              />
+              <div className="inicio-movie-title">{movie.title}</div>
+            </div>
+          ))}
+        </div>
+      </section>
 
     </div >
   );
