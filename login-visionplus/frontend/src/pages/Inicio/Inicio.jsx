@@ -49,7 +49,7 @@ export default function Inicio() {
   }
 
   function goToBusqueda() {
-    navigate("/buscar");
+    navigate("/busqueda");
   }
 
   function goToPerfil() {
