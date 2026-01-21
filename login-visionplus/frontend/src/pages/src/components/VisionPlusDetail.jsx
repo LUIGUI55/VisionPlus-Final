@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { moviesService, listsService } from "../../../services/api.js";
 import { useEffect, useState } from "react";
+import "./VisionPlusDetail.css";
 
 export default function VisionPlusDetail() {
   const navigate = useNavigate();
