@@ -38,3 +38,4 @@ async function bootstrap() {
     console.log('Esperando peticiones... (ojalá no explote)');
 }
 bootstrap();
+// Deploy trigger: 01/20/2026 18:39:56
