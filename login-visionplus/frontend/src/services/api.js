@@ -76,4 +76,23 @@ export const moviesService = {
     }
 };
 
+export const listsService = {
+    getFavorites: async (profileId) => {
+        const response = await api.get(`/lists/favorites?profileId=${profileId}`);
+        return response.data;
+    },
+    addToFavorites: async (profileId, movieId, movieData) => {
+        const response = await api.post('/lists/favorites', { profileId, movieId, movieData });
+        return response.data;
+    },
+    removeFromFavorites: async (profileId, movieId) => {
+        const response = await api.delete(`/lists/favorites/${movieId}?profileId=${profileId}`);
+        return response.data;
+    },
+    checkFavorite: async (profileId, movieId) => {
+        const response = await api.get(`/lists/favorites/check/${movieId}?profileId=${profileId}`);
+        return response.data;
+    }
+};
+
 export default api;

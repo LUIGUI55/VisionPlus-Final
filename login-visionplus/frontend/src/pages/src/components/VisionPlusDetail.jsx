@@ -1,27 +1,56 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { moviesService } from "../../../services/api.js";
+import { moviesService, listsService } from "../../../services/api.js";
 import { useEffect, useState } from "react";
 
 export default function VisionPlusDetail() {
   const navigate = useNavigate();
   const { id } = useParams();
   const [movie, setMovie] = useState(null);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+    if (storedUser) setUser(storedUser);
+
     async function fetchDetail() {
       try {
-        // Support both API ID and legacy string IDs fallback if needed
         if (id === 'strangerthings') {
           // allow fallback static or redirect
         }
         const data = await moviesService.getVideoDetails(id);
         setMovie(data);
+
+        // Check if favorite
+        if (storedUser) {
+          const userId = storedUser._id || storedUser.id;
+          const isFav = await listsService.checkFavorite(userId, id);
+          setIsFavorite(isFav);
+        }
       } catch (e) {
         console.error("Failed to load movie detail", e);
       }
     }
     fetchDetail();
   }, [id]);
+
+  const toggleFavorite = async () => {
+    if (!user) return alert("Inicia sesión para agregar a favoritos");
+    const userId = user._id || user.id;
+
+    try {
+      if (isFavorite) {
+        await listsService.removeFromFavorites(userId, movie.id);
+        setIsFavorite(false);
+      } else {
+        await listsService.addToFavorites(userId, movie.id, movie);
+        setIsFavorite(true);
+      }
+    } catch (error) {
+      console.error("Error updating favorites", error);
+      alert("No se pudo actualizar la lista");
+    }
+  };
 
   if (!movie) return <div style={{ color: 'white', padding: '20px' }}>Cargando...</div>;
 
@@ -67,7 +96,9 @@ export default function VisionPlusDetail() {
             </figure>
             <div className="actions">
               <button className="act-btn" style={{ backgroundColor: '#9d4edd', color: 'white', marginRight: '10px' }} onClick={() => navigate(`/ver/${id}`)}>▶ Ver ahora</button>
-              <button className="act-btn">➕ Agregar a… <small>Mi lista</small></button>
+              <button className="act-btn" onClick={toggleFavorite}>
+                {isFavorite ? "✔️ En mi lista" : "➕ Agregar a…"} <small>Mi lista</small>
+              </button>
             </div>
           </aside>
 
@@ -85,12 +116,7 @@ export default function VisionPlusDetail() {
               <p className="syn">{movie.overview}</p>
             </header>
 
-            <div className="bar">
-              <div className="row">
-                <div className="tag"><span className="dot"></span> Latino <small style={{ opacity: .7 }}>CALIDAD HD</small></div>
-                <div className="tag"><span className="dot"></span> Descargar <small style={{ opacity: .7 }}>CALIDAD HD</small></div>
-              </div>
-            </div>
+
 
             <div className="player" onClick={() => navigate(`/ver/${id}`)}>
               <div className="ph"></div>
@@ -98,6 +124,7 @@ export default function VisionPlusDetail() {
 
             <section className="features">
             </section>
+
 
 
           </section>
