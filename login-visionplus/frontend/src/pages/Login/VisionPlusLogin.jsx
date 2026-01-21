@@ -105,27 +105,16 @@ export default function VisionPlusLogin({ backgroundUrl = "fondo.jpg" }) {
 
         <div style={{
           position: 'absolute',
-          right: '-280px', /* Posicionar a la derecha del form */
+          right: '-280px',
           top: '50%',
           transform: 'translateY(-50%)',
           width: '240px',
           height: '360px',
           zIndex: 5,
-          display: 'none' /* Oculto en movil por defecto, activar con media query si se desea */
+          display: 'none'
         }} className="landing-carousel">
-          {/* Carousel logic here - reusing simple image stack for visual flair */}
-          {/* Since we don't have movie list here, let's hardcode some posters or fetch? */}
-          {/* Better: Use CSS animation with background images if no data */}
-          {/* Or just static stack image to fit the design request "carrucel de imagenes" */}
-          {/* Let's try to fetch popular movies briefly or use static list */}
-          <div className="carousel-track-landing">
-            {/* We will add specific CSS for this in VisionPlusLogin.css */}
-          </div>
+          {/* Hidden legacy container, removing logic to clean up */}
         </div>
-
-        {/* MOVING CAROUSEL TO PROPER CONTAINER OUTSIDE CARD IF NEEDED OR EXTENDING CARD */}
-        {/* User wants it on "Landing Page". The screenshot shows a split layout. */}
-        {/* Let's actually Add it to the 'hero' section side-by-side with 'card' */}
 
     </div>
         
