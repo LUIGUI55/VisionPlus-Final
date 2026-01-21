@@ -116,25 +116,25 @@ export default function VisionPlusLogin({ backgroundUrl = "fondo.jpg" }) {
           {/* Hidden legacy container, removing logic to clean up */}
         </div>
 
-    </div>
-        
-        {/* NEW CAROUSEL CONTAINER SIDE BY SIDE */ }
-  <div className="landing-carousel-container">
-    <div className="carousel-track">
-      {[
-        "https://image.tmdb.org/t/p/w500/1E5baAaEse26fej7uHkjDfoveCc.jpg", // Spiderman
-        "https://image.tmdb.org/t/p/w500/zJrZ1eD93r1E99n7ci5d9p2e3.jpg", // The Batman
-        "https://image.tmdb.org/t/p/w500/6KErczPBROQty7QoIsaa6wJYXZi.jpg", // Mario
-        "https://image.tmdb.org/t/p/w500/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg" // Across the spiderverse
-      ].map((src, i) => (
-        <div key={i} className="carousel-slide-landing" style={{
-          animationDelay: `${i * 2}s`
-        }}>
-          <img src={src} alt="Movie" />
+
+
+        {/* NEW CAROUSEL CONTAINER SIDE BY SIDE */}
+        <div className="landing-carousel-container">
+          <div className="carousel-track">
+            {[
+              "https://image.tmdb.org/t/p/w500/1E5baAaEse26fej7uHkjDfoveCc.jpg", // Spiderman
+              "https://image.tmdb.org/t/p/w500/zJrZ1eD93r1E99n7ci5d9p2e3.jpg", // The Batman
+              "https://image.tmdb.org/t/p/w500/6KErczPBROQty7QoIsaa6wJYXZi.jpg", // Mario
+              "https://image.tmdb.org/t/p/w500/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg" // Across the spiderverse
+            ].map((src, i) => (
+              <div key={i} className="carousel-slide-landing" style={{
+                animationDelay: `${i * 2}s`
+              }}>
+                <img src={src} alt="Movie" />
+              </div>
+            ))}
+          </div>
         </div>
-      ))}
-    </div>
-  </div>
 
       </main >
     </div >
